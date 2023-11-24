@@ -39,22 +39,36 @@ class _SpalshScreenState extends State<SpalshScreen> {
 
     return Scaffold(
     body: 
-     Center(
-        child:  Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Image.asset(
-                  'assets/image/logo.png',
-                  height: 200,
-                  width: 230,
-                ),
-               const SizedBox(
-                  height: 5,
-                ),
+     Container(
+       decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Color(0xFFF4EEF9), // Couleur en haut
+            Color.fromARGB(255, 239, 235, 241), // Couleur en haut
+            Color.fromARGB(255, 212, 210, 221), // Couleur au milieu
+            Color.fromARGB(255, 220, 216, 233), // Couleur en bas
           ],
-        )
-        
+        ),
       ),
+       child: Center(
+          child:  Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+            Image.asset(
+                    'assets/image/logo.png',
+                    // height: 200,
+                    // width: 230,
+                  ),
+                 const SizedBox(
+                    height: 5,
+                  ),
+            ],
+          )
+          
+        ),
+     ),
       
     );
   //   Container(
