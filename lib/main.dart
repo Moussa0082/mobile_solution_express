@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/screens/GuideScreen.dart';
+import 'package:solution_express/screens/LoginScreen.dart';
 import 'package:solution_express/screens/SplashScreen.dart';
 
 void main() {
@@ -16,7 +18,7 @@ class MyApp extends StatelessWidget {
     
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  GuideScreen(),
+      home:  SpalshScreen(),
     );
   }
 }

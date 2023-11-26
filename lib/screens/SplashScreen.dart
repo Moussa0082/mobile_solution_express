@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/screens/LoginScreen.dart';
 
 class SpalshScreen extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SpalshScreenState extends State<SpalshScreen> {
       () =>
       Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-      builder: (_) => const LoginScreen(),
+      builder: (_) => const Nav(),
       ),
       ),
      );

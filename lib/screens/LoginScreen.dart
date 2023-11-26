@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //   transform = GradientRotation(math.pi / 3),
       // ),
         body: Container(
+          height: double.infinity,
            decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -45,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Color(0xFFF4EEF9), // Couleur en haut
             Color.fromARGB(255, 239, 235, 241), // Couleur en haut
             Color.fromARGB(255, 212, 210, 221), // Couleur au milieu
-            Color.fromARGB(255, 220, 216, 233), // Couleur en bas
+            Color.fromARGB(255, 226, 223, 236), // Couleur en bas
           ],
         ),
       ),
@@ -173,9 +174,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         minimumSize: Size(300, 40)),
                   ),
                   const SizedBox(
-                        height: 20,
+                        height: 60,
                       ),
-                       const Text("si vous n'avez pas de compte ?"),
+                       const Text("si vous n'avez pas de compte ?", style: TextStyle(fontSize: 20),),
+                      const SizedBox(height: 20,),
                       GestureDetector(
                           onTap: () {
                             Navigator.push(context,
@@ -184,8 +186,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: const Text(
                             "Inscrivez vous",
                             style: TextStyle(
+                              fontSize: 20,
                                 color: Colors.blue,
-                                decoration: TextDecoration.underline),
+                                // decoration: TextDecoration.underline
+                                ),
                           )
                           )
                 ],
