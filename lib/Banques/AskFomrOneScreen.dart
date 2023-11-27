@@ -2,10 +2,12 @@
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:solution_express/Banques/AskFormEnd.dart';
+  enum SingingCharacter { masculin, feminin }
 
 class AskFormOneScreen extends StatefulWidget {
   const AskFormOneScreen({super.key});
@@ -25,15 +27,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
   bool isAddingResponse = false;
   int _textFieldCount = 0;
 
-  void generateTextField() {
-    if (_textFieldCount < 5) {
-      setState(() {
-        _textFieldCount++;
-        _reponseControllers
-            .add(TextEditingController()); // Ajoutez un nouveau contrôleur
-      });
-    }
-  }
+ 
 
   // Fonction pour créer un bouton
   Widget buildButton({
@@ -91,7 +85,11 @@ Future<void> _pickImage(ImageSource source) async {
 
   final _formKey = GlobalKey<FormState>();
   final textController = TextEditingController();
+    TextEditingController datenaiss = TextEditingController();
   final reponseController = TextEditingController();
+  //radio
+    SingingCharacter? _character = SingingCharacter.masculin;
+    // radio var 
   List<String> type = [];
   List<String> choix = [];
   @override
@@ -254,6 +252,26 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                                  controller:datenaiss,
+                                  onTap: () async {
+                                        DateTime? pickedDate = await showDatePicker(
+                                            context: context,
+                                            initialDate: DateTime.now(),
+                                            firstDate: DateTime(1950),
+                                            //DateTime.now() - not to allow to choose before today.
+                                            lastDate: DateTime(2100));
+                                        if (pickedDate != null) {
+                                          print(pickedDate);
+                                          String formattedDate =
+                                              DateFormat('yyyy-MM-dd')
+                                                  .format(pickedDate);
+                                          print(formattedDate);
+                                          setState(() {
+                                            datenaiss.text =
+                                                formattedDate;
+                                          });
+                                        } else {}
+                                      },
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -319,14 +337,35 @@ Future<void> _pickImage(ImageSource source) async {
                             Row(
 
                               children: [
-                                const SizedBox(width: 10,),
-                                Text("Masculin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
-                                const SizedBox(width: 10,),
-                                Radio(value: (){}, groupValue: null, onChanged: null),
-                                const SizedBox(width: 120,),
-                                Text("Feminin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
-                                const SizedBox(width: 10,),
-                                Radio(value: (){}, groupValue: null, onChanged: null),
+                                // const SizedBox(width: 10,),
+                                // Text("Masculin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
+                                // const SizedBox(width: 10,),
+                                // Radio(value: (){}, groupValue: null, onChanged: null),
+                                // const SizedBox(width: 120,),
+                                // Text("Feminin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
+                                // const SizedBox(width: 10,),
+                                // Radio(value: (){}, groupValue: null, onChanged: null),
+                                 Radio<SingingCharacter>(
+                            value: SingingCharacter.masculin,
+                            groupValue: _character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _character = value;
+                              });
+                            },
+                          ),
+                          const Text('Masculin' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB),),),
+                          const SizedBox(width:100),
+                          Radio<SingingCharacter>(
+                            value: SingingCharacter.feminin,
+                            groupValue: _character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _character = value;
+                              });
+                            },
+                          ),
+                          const Text('Féminin', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)),),
                                
                               ],
                             ),
@@ -411,23 +450,7 @@ Future<void> _pickImage(ImageSource source) async {
   }
 }
 
-class ChoixPage extends StatefulWidget {
-  const ChoixPage({super.key});
 
-  @override
-  State<ChoixPage> createState() => _ChoixPageState();
-}
-
-class _ChoixPageState extends State<ChoixPage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Choix page'),
-      ),
-    );
-  }
-}
 
 
 

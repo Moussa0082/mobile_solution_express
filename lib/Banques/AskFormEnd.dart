@@ -3,9 +3,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+
+    enum SingingCharacter {Celibataire, Marier }
+
+  enum SingingCharacters { Etranger, Resident_Permanent }
 
 
 class AskFormEnd extends StatefulWidget {
@@ -22,6 +27,10 @@ class _AskFormEndState extends State<AskFormEnd> {
 
   final _reponseController = TextEditingController();
   List<TextEditingController> _reponseControllers = [];
+
+      SingingCharacter? _character = SingingCharacter.Celibataire;
+      SingingCharacters? _characters = SingingCharacters.Resident_Permanent;
+
 
   bool isAddingResponse = false;
   int _textFieldCount = 0;
@@ -48,7 +57,6 @@ class _AskFormEndState extends State<AskFormEnd> {
       label: Text(title),
     );
   }
-
   Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
     final name = basename(imagePath);
@@ -57,21 +65,70 @@ class _AskFormEndState extends State<AskFormEnd> {
     return File(imagePath).copy(image.path);
   }
 
-  Future pickImages() async {
-    try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
+   Future<File?> getImage(ImageSource source) async {
+  final image = await ImagePicker().pickImage(source: source);
+  if (image == null) return null;
 
-      // final ImageTemporary = File(images.path);
-      final imagePermanent = await saveImagePermanently(image.path);
-      setState(() {
-        this.image = imagePermanent;
-        imageSrc = imagePermanent.path;
-      });
-    } on PlatformException catch (e) {
-      print('Impossible de télécharger l\'image $e');
-    }
+  return File(image.path);
+}
+
+Future<void> _pickImage(ImageSource source) async {
+  final image = await getImage(source);
+  if (image != null) {
+    setState(() {
+      this.image = image;
+      imageSrc = image.path;
+    });
   }
+}
+
+
+   
+
+    Future<void> _showImageSourceDialog() async {
+  final BuildContext context = this.context;
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return SizedBox(
+        height: 150,
+        child: AlertDialog(
+          title: Text('Choisir une source'),
+          content: Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Fermer le dialogue
+                  _pickImage(ImageSource.camera);
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.camera_alt, size: 40),
+                    Text('Camera'),
+                  ],
+                ),
+              ),
+              const SizedBox(width:40),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Fermer le dialogue
+                  _pickImage(ImageSource.gallery);
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.image, size: 40),
+                    Text('Galerie photo'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
   final _formKey = GlobalKey<FormState>();
   final textController = TextEditingController();
@@ -122,7 +179,7 @@ class _AskFormEndState extends State<AskFormEnd> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Ajouter une image',
+                            "Carte d'identité/Bio/Passport",
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'Poppins',
@@ -131,7 +188,7 @@ class _AskFormEndState extends State<AskFormEnd> {
                           buildButton(
                             title: 'Choisir image',
                             icon: Icons.image,
-                            onClicked: () => pickImages(),
+                            onClicked: () => _showImageSourceDialog(),
                           ),
                         ],
                       ),
@@ -148,17 +205,18 @@ class _AskFormEndState extends State<AskFormEnd> {
                     key: _formKey,
                     child: Column(children: <Widget>[
                       Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
                           
                           children: [
 
                             const SizedBox(height:10),
                             Column(
+                                crossAxisAlignment: CrossAxisAlignment.start, 
                               children: [
                                 // label 
+
                                 Positioned(
                                   
-                                  child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                                  child: Text('Votre lieu de naissance', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                                 ),
 
                                 //Text form field 
@@ -169,13 +227,13 @@ class _AskFormEndState extends State<AskFormEnd> {
                           color: Color(0xFF9A6ABB),
                             ),
                             borderRadius: BorderRadius.circular(15)),
-                        labelText: "Adresse",
-                        hintText: "Entrez votre adresse",
+                        labelText: "Lieu de naissance",
+                        hintText: "Entrez votre lieu de naissance",
                        ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return "Veillez entrez votre adresse";
+                        return "Veillez entrez votre lieu de naissance";
                       } else {
                         return null;
                       }
@@ -183,10 +241,11 @@ class _AskFormEndState extends State<AskFormEnd> {
                     // onSaved: (val) => email = val!,
                   ),
                 //  fin textform field 
+                const SizedBox(height:10),
                                 // label 
                                 Positioned(
                                   
-                                  child: Text('Votre date de naissance', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                                  child: Text('Votre nationnalité', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                                 ),
 
                                 //Text form field 
@@ -197,13 +256,13 @@ class _AskFormEndState extends State<AskFormEnd> {
                           color: Color(0xFF9A6ABB),
                             ),
                             borderRadius: BorderRadius.circular(15)),
-                        labelText: "Date de naisance",
-                        hintText: "Entrez votre date de naissance",
+                        labelText: "Nationnalité",
+                        hintText: "Entrez votre nationnalité",
                        ),
                     keyboardType: TextInputType.emailAddress,
                     validator: (val) {
                       if (val == null || val.isEmpty) {
-                        return "Veillez entrez votre date de naissance";
+                        return "Veillez entrez votre nationnalité";
                       } else {
                         return null;
                       }
@@ -211,50 +270,97 @@ class _AskFormEndState extends State<AskFormEnd> {
                     // onSaved: (val) => email = val!,
                   ),
                 //  fin textform field 
+                const SizedBox(height:10),
                                 // label 
-                                Positioned(
-                                  
-                                  child: Text('Votre numéro de telephone', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
-                                ),
+                              
 
-                                //Text form field 
-                                 TextFormField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                           borderSide: BorderSide(
-                          color: Color(0xFF9A6ABB),
-                            ),
-                            borderRadius: BorderRadius.circular(15)),
-                        labelText: "Téléphone",
-                        hintText: "Entrez votre numero de telephone",
-                       ),
-                    keyboardType: TextInputType.number,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Veillez entrez votre numéro de telephone";
-                      } else {
-                        return null;
-                      }
-                    },
-                    // onSaved: (val) => email = val!,
-                  ),
-                //  fin textform field 
-
-                 
-
+                  //radio button
+                         SizedBox(height: 10,),
+                     
+                                Positioned(child: const Text("Votre statut de residence ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),)),
                               ],
                             ),
 
-                            SizedBox(
-                              height: 15,
+                            
+   
+                  
+                            Row(
+
+                              children: [
+                                
+                                 Radio<SingingCharacter>(
+                            value: SingingCharacter.Celibataire,
+                            groupValue: _character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _character = value;
+                              });
+                            },
+                          ),
+                          const Text('Celibataire' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB),),),
+                          const SizedBox(width:100),
+                          Radio<SingingCharacter>(
+                            value: SingingCharacter.Marier,
+                            groupValue: _character,
+                            onChanged: (SingingCharacter? value) {
+                              setState(() {
+                                _character = value;
+                              });
+                            },
+                          ),
+                          Expanded(child: const Text('Marier', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)),)),
+                               
+                              ],
                             ),
+                             SizedBox(height: 10,),
+                          Column(
+                         crossAxisAlignment: CrossAxisAlignment.start,
+                            children:[
+
+                                const Text("Votre statut de residence ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),),
+                            ],
+                          ),
+
+                              
+                            
+                            Row(
+
+                              children: [
+                                
+                                 Radio<SingingCharacters>(
+                            value: SingingCharacters.Etranger,
+                            groupValue: _characters,
+                            onChanged: (SingingCharacters? value) {
+                              setState(() {
+                                _characters = value;
+                              });
+                            },
+                          ),
+                          const Text('Etranger' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB),),),
+                          const SizedBox(width:70),
+                          Radio<SingingCharacters>(
+                            value: SingingCharacters.Resident_Permanent,
+                            groupValue: _characters,
+                            onChanged: (SingingCharacters? value) {
+                              setState(() {
+                                _characters = value;
+                              });
+                            },
+                          ),
+                          Expanded(child: const Text('Resident Permanent', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)),)),
+                               
+                              ],
+                            ),
+
+
                             Padding(
                               padding: const EdgeInsets.symmetric(horizontal:50.0),
                               child: ElevatedButton(
                                 onPressed: () async {
+
                                   if (_formKey.currentState!.validate()) {
                                     debugPrint('Début validation ');
-                              
+                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> const AskFormEnd() ));
                                     
                               
                                    
@@ -294,12 +400,12 @@ class _AskFormEndState extends State<AskFormEnd> {
                                     // ChoixService choixService = ChoixService();
                                     // await choixService.createChoix(1, 1, 1, choises);
                               
-                                    print("Question ajoutée avec succès");
+                                    print("Demande envoyer avec succès");
                                   } else {
-                                    print("Question non ajoutée");
+                                    print("Demande non envoyer");
                                   }
                                 },
-                                child: Text('Continuer', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)), ),
+                                child: Text('Envoyer la demande', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)), ),
                                 style: ElevatedButton.styleFrom(
                                   fixedSize: Size(250,40),
                                   backgroundColor:Color.fromARGB(255, 240, 237, 241) ,
@@ -312,8 +418,10 @@ class _AskFormEndState extends State<AskFormEnd> {
                                   // ),
                                 ),
                               ),
-                            )
-                          ]),
+                            ),
+                           
+                          ]
+                          ),
                     ]
                     ),
                     ),
