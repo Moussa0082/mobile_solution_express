@@ -56,6 +56,23 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
     return File(imagePath).copy(image.path);
   }
 
+   Future<File?> getImage(ImageSource source) async {
+  final image = await ImagePicker().pickImage(source: source);
+  if (image == null) return null;
+
+  return File(image.path);
+}
+
+Future<void> _pickImage(ImageSource source) async {
+  final image = await getImage(source);
+  if (image != null) {
+    setState(() {
+      this.image = image;
+      imageSrc = image.path;
+    });
+  }
+}
+
   Future pickImages() async {
     try {
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -84,6 +101,51 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
     super.initState();
   }
   List<String> visibilite = [];
+
+  Future<void> _showImageSourceDialog() async {
+  final BuildContext context = this.context;
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return SizedBox(
+        height: 150,
+        child: AlertDialog(
+          title: Text('Choisir une source'),
+          content: Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Fermer le dialogue
+                  _pickImage(ImageSource.camera);
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.camera_alt, size: 40),
+                    Text('Camera'),
+                  ],
+                ),
+              ),
+              const SizedBox(width:40),
+              GestureDetector(
+                onTap: () {
+                  Navigator.pop(context); // Fermer le dialogue
+                  _pickImage(ImageSource.gallery);
+                },
+                child: Column(
+                  children: [
+                    Icon(Icons.image, size: 40),
+                    Text('Galerie photo'),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -121,7 +183,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'Ajouter une image',
+                            "Photo d'identité",
                             style: TextStyle(
                               fontSize: 20,
                               fontFamily: 'Poppins',
@@ -130,7 +192,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                           buildButton(
                             title: 'Choisir image',
                             icon: Icons.image,
-                            onClicked: () => pickImages(),
+                            onClicked: () => _showImageSourceDialog(),
                           ),
                         ],
                       ),
@@ -147,14 +209,15 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                     key: _formKey,
                     child: Column(children: <Widget>[
                       Column(
-                          // crossAxisAlignment: CrossAxisAlignment.start,
                           
                           children: [
 
                             const SizedBox(height:10),
                             Column(
+                                crossAxisAlignment: CrossAxisAlignment.start, 
                               children: [
                                 // label 
+
                                 Positioned(
                                   
                                   child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
@@ -182,6 +245,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                     // onSaved: (val) => email = val!,
                   ),
                 //  fin textform field 
+                const SizedBox(height:10),
                                 // label 
                                 Positioned(
                                   
@@ -210,6 +274,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                     // onSaved: (val) => email = val!,
                   ),
                 //  fin textform field 
+                const SizedBox(height:10),
                                 // label 
                                 Positioned(
                                   
@@ -239,19 +304,20 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                   ),
                 //  fin textform field 
 
-                 
-
+                  //radio button
+                         SizedBox(height: 10,),
+                     
+                                Positioned(child: const Text("Votre sexe ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),)),
                               ],
                             ),
 
                             SizedBox(
-                              height: 15,
+                              height: 5,
                             ),
    
-                  //radio button
-                   SizedBox(height: 5,),
-                            const Text("Votre sexe ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),),
+                  
                             Row(
+
                               children: [
                                 const SizedBox(width: 10,),
                                 Text("Masculin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
@@ -261,7 +327,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
                                 Text("Feminin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
                                 const SizedBox(width: 10,),
                                 Radio(value: (){}, groupValue: null, onChanged: null),
-                              
+                               
                               ],
                             ),
 
@@ -363,3 +429,100 @@ class _ChoixPageState extends State<ChoixPage> {
   }
 }
 
+
+
+
+
+/* 
+Future<void> _showImageSourceDialog() async {
+  final BuildContext context = this.context; // Get the BuildContext from the current widget
+
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Choisir une source'),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            GestureDetector(
+              onTap: () {
+                // Demander l'autorisation d'accéder à la caméra
+                // if (PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.camera)) {
+                //   // L'utilisateur n'a pas encore été invité à accorder l'autorisation
+                //   // Demander l'autorisation
+                //   PermissionHandler().requestPermissions([PermissionGroup.camera]).then((permissions) {
+                //     if (permissions[PermissionGroup.camera] == PermissionStatus.granted) {
+                //       // L'autorisation a été accordée
+                //       _pickImage(ImageSource.camera);
+                //     } else {
+                //       // L'autorisation a été refusée
+                //       // Afficher un message d'erreur à l'utilisateur
+                //       // Afficher un message dans un Toast
+                //       Fluttertoast.showToast(
+                //         msg: "L'autorisation d'accéder à la caméra a été refusée",
+                //         toastLength: Toast.LENGTH_SHORT,
+                //         gravity: ToastGravity.CENTER,
+                //         backgroundColor: Colors.red,
+                //         textColor: Colors.white,
+                //       );
+                //     }
+                //   });
+                // } else {
+                  // L'utilisateur a déjà été invité à accorder l'autorisation
+                  // Prendre une photo sans demander l'autorisation
+                  _pickImage(ImageSource.camera);
+                // }
+              },
+              child: Column(
+                children: [
+                  Icon(Icons.camera_alt, size: 40),
+                  Text('Prendre une photo'),
+                ],
+              ),
+            ),
+            GestureDetector(
+              onTap: () {
+                // Demander l'autorisation d'accéder à la galerie
+                // if (PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.photos)) {
+                //   // L'utilisateur n'a pas encore été invité à accorder l'autorisation
+                //   // Demander l'autorisation
+                //   PermissionHandler().requestPermissions([PermissionGroup.photos]).then((permissions) {
+                //     if (permissions[PermissionGroup.photos] == PermissionStatus.granted) {
+                //       // L'autorisation a été accordée
+                //       _pickImage(ImageSource.gallery);
+                //     } else {
+                //       // L'autorisation a été refusée
+                //       // Afficher un message d'erreur à l'utilisateur
+                //       // Afficher un message dans un Toast
+                //       Fluttertoast.showToast(
+                //         msg: "L'autorisation d'accéder à la galerie a été refusée",
+                //         toastLength: Toast.LENGTH_SHORT,
+                //         gravity: ToastGravity.CENTER,
+                //         backgroundColor: Colors.red,
+                //         textColor: Colors.white,
+                //       );
+                //     }
+                //   });
+                // } else {
+                  // L'utilisateur a déjà été invité à accorder l'autorisation
+                  // Prendre une photo sans demander l'autorisation
+                  _pickImage(ImageSource.gallery);
+                // }
+              },
+              child: Column(
+                children: [
+                  Icon(Icons.image, size: 40),
+                  Text('Choisir depuis la galerie'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+
+*/
