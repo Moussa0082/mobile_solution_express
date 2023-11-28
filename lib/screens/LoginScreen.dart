@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:solution_express/models/Utilisateur.dart';
 import 'package:solution_express/providers/UtilisateurProvider.dart';
+import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/screens/GuideScreen.dart';
 import 'package:solution_express/screens/RegisterScreen.dart';
 
@@ -38,7 +39,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // final String baseUrl = 'https://buget-service-api-git.onrender.com/utilisateur'; // Remplacez par la base URL de votre API.
     final String email = emailController.text;
     final String password = motDePasseController.text;
-    UtilisateurProvider utilisateurProvider = Provider.of<UtilisateurProvider>(context, listen: false);
+    // UtilisateurProvider utilisateurProvider = Provider.of<UtilisateurProvider>(context, listen: false);
 
     if (email.isEmpty || password.isEmpty) {
 
@@ -95,11 +96,11 @@ class _LoginScreenState extends State<LoginScreen> {
           // Autres champs...
         );
         // Créez une instance de la classe Utilisateur avec ces données.
-        final utilisateurConnecte = utilisateur;
+        // final utilisateurConnecte = utilisateur;
         // Affichez les informations de l'utilisateur dans votre interface utilisateur (UI).
         // Stockez l'utilisateur dans UtilisateurProvider.
-        utilisateurProvider.setUtilisateur(utilisateur);
-        Navigator.push(context,MaterialPageRoute(builder: (context) => GuideScreen()));
+        // utilisateurProvider.setUtilisateur(utilisateur);
+        Navigator.push(context,MaterialPageRoute(builder: (context) => Nav()));
         // Navigator.pushNamed(
         //   context,
         //   '/BottomNavigationPage',
@@ -280,9 +281,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    onPressed: (){
-                      loginUser;
-                    },
+                    onPressed: 
+                      loginUser,
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF9A6ABB),
                         shape: RoundedRectangleBorder(

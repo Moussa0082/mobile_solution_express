@@ -87,3 +87,38 @@ class _GuideScreenState extends State<GuideScreen> {
     );
   }
 }
+
+
+
+//On will onTap
+
+class ExitConfirmationDialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Quitter l\'application ?'),
+      content: Text('Êtes-vous sûr de vouloir quitter complètement l\'application ?'),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(false); // L'utilisateur ne veut pas quitter
+          },
+          child: Text('Annuler'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(true); // L'utilisateur veut quitter
+          },
+          child: Text('Quitter'),
+        ),
+      ],
+    );
+  }
+}
+
+Future<bool> showExitConfirmationDialog(BuildContext context) async {
+  return await showDialog<bool>(
+    context: context,
+    builder: (context) => ExitConfirmationDialog(),
+  ) ?? false; // L'utilisateur a appuyé sur le bouton "retour" du matériel
+}

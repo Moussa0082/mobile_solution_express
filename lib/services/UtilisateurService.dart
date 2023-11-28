@@ -10,8 +10,8 @@ import 'package:solution_express/models/Utilisateur.dart';
 
 class UtilisateurService extends ChangeNotifier {
 
-  static const String apiUrl = 'http://10.0.2.2:8080/utilisateur/create'; // Mettez à jour l'URL correcte
-  static const String apiUrl2 = 'http://10.0.2.2:8080/utilisateur/update2'; // Mettez à jour l'URL correcte
+  static const String apiUrl = 'http://10.0.2.2:8080/user/create'; // Mettez à jour l'URL correcte
+  static const String apiUrl2 = 'http://10.0.2.2:8080/user/update2'; // Mettez à jour l'URL correcte
    
   
   static Future<Utilisateur> ajouterUtilisateur({
@@ -38,7 +38,7 @@ class UtilisateurService extends ChangeNotifier {
         'prenom' : prenom,
         'email' : email,
         'motDePasse' : motDePasse,
-        'photos' : ""
+        'image' : ""
       });
       var response = await request.send();
     

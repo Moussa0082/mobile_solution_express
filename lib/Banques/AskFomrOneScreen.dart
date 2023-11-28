@@ -21,11 +21,7 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
    File? image;
   String? imageSrc;
 
-  final _reponseController = TextEditingController();
-  List<TextEditingController> _reponseControllers = [];
 
-  bool isAddingResponse = false;
-  int _textFieldCount = 0;
 
  
 
@@ -95,7 +91,6 @@ Future<void> _pickImage(ImageSource source) async {
   @override
   void initState() {
     
-    _reponseControllers = [];
     super.initState();
   }
   List<String> visibilite = [];
