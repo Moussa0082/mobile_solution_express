@@ -1,6 +1,11 @@
 
-
- import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:solution_express/models/Utilisateur.dart';
+import 'package:solution_express/providers/UtilisateurProvider.dart';
+import 'package:solution_express/screens/GuideScreen.dart';
 import 'package:solution_express/screens/RegisterScreen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,18 +29,126 @@ class _LoginScreenState extends State<LoginScreen> {
   String pseudo = "";
   bool _obscureText = true;
 
+    TextEditingController emailController = TextEditingController();
+  TextEditingController motDePasseController = TextEditingController();
+
+    Future<void> loginUser() async {
+    // /utilisateur/login
+    final String baseUrl = 'http://10.0.2.2:8080/user'; // Remplacez par la base URL de votre API.
+    // final String baseUrl = 'https://buget-service-api-git.onrender.com/utilisateur'; // Remplacez par la base URL de votre API.
+    final String email = emailController.text;
+    final String password = motDePasseController.text;
+    UtilisateurProvider utilisateurProvider = Provider.of<UtilisateurProvider>(context, listen: false);
+
+    if (email.isEmpty || password.isEmpty) {
+
+      // Gérez le cas où l'email ou le mot de passe est vide.
+       const String errorMessage = "Veillez remplir tout les champs ";
+        // Gérez le cas où l'email ou le mot de passe est vide.
+        showDialog(
+          context:  context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Center(child: Text('Erreur')),
+              content:const  Text(errorMessage),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:const  Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      return;
+    }
+    const String endpoint = '/login';
+    final Uri apiUrl = Uri.parse('$baseUrl$endpoint?email=$email&motDePasse=$password');
+
+    try {
+      final response = await http.post(
+        apiUrl,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        // Authentification réussie, vous pouvez gérer la réponse ici.
+        // Par exemple, vous pouvez enregistrer le token d'authentification.
+        final responseBody = json.decode(utf8.decode(response.bodyBytes));
+        //final authToken = responseBody['authToken']; // Remplacez par le nom réel du champ d'authentification.
+        // Enregistrez authToken ou effectuez d'autres actions nécessaires.
+        emailController.clear();
+        motDePasseController.clear();
+        // Redirigez l'utilisateur vers la page suivante.
+        // Créez un objet Utilisateur avec les informations nécessaires.
+        Utilisateur utilisateur = Utilisateur(
+          nom: responseBody['nom'], // Remplacez par les vrais noms de champs.
+          prenom: responseBody['prenom'],
+          image: responseBody['image'],
+          motDePasse: password,
+          email: email,
+          idUtilisateur: responseBody['idUtilisateur'],
+          // Autres champs...
+        );
+        // Créez une instance de la classe Utilisateur avec ces données.
+        final utilisateurConnecte = utilisateur;
+        // Affichez les informations de l'utilisateur dans votre interface utilisateur (UI).
+        // Stockez l'utilisateur dans UtilisateurProvider.
+        utilisateurProvider.setUtilisateur(utilisateur);
+        Navigator.push(context,MaterialPageRoute(builder: (context) => GuideScreen()));
+        // Navigator.pushNamed(
+        //   context,
+        //   '/BottomNavigationPage',
+        //   arguments: utilisateurConnecte, // Passer l'objet utilisateurConnecte en tant qu'argument.
+        // );
+      } else {
+        // Gérez les erreurs d'authentification ici, par exemple affichez un message d'erreur.
+        final responseBody = json.decode(response.body);
+        final errorMessage = responseBody['message']; // Remplacez par le nom réel du champ d'erreur.
+        // Affichez un message d'erreur à l'utilisateur.
+         showDialog(
+          context:  context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title:  Center(child: Text('Connexion echouer !')),
+              content:  Text(errorMessage),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:  Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    } catch (e) {
+      // Gérez les erreurs liées à la requête HTTP ici.
+      print('Erreur de connexion: $e');
+      // Affichez un message d'erreur générique ou effectuez d'autres actions nécessaires.
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialisation des contrôleurs de texte avec des valeurs vides.
+    emailController.clear();
+    motDePasseController.clear();
+  }
+   
+
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      // backgroundColor:
-      // LinearGradient(
-      //   Colors = [
-           
-      //   ],
-      //   begin = Alignment.topCenter,
-      //   end = Alignment.bottomCenter,
-      //   transform = GradientRotation(math.pi / 3),
-      // ),
+   
         body: Container(
           height: double.infinity,
            decoration: const BoxDecoration(
@@ -44,9 +157,9 @@ class _LoginScreenState extends State<LoginScreen> {
           end: Alignment.bottomCenter,
           colors: [
             Color(0xFFF4EEF9), // Couleur en haut
-            Color.fromARGB(255, 239, 235, 241), // Couleur en haut
-            Color.fromARGB(255, 212, 210, 221), // Couleur au milieu
-            Color.fromARGB(255, 226, 223, 236), // Couleur en bas
+            Color.fromARGB(255, 203, 197, 206), // Couleur en haut
+            Color.fromARGB(255, 187, 186, 192), // Couleur au milieu
+            Color.fromARGB(255, 204, 203, 207), // Couleur en bas
           ],
         ),
       ),
@@ -81,6 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   
                   TextFormField(
+                    controller: emailController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15)),
@@ -107,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   // debut  mot de pass
                   TextFormField(
-                    // controller: passwordController,
+                    controller: motDePasseController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15)),
@@ -166,7 +280,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    onPressed: (){},
+                    onPressed: (){
+                      loginUser;
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF9A6ABB),
                         shape: RoundedRectangleBorder(
