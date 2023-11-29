@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:solution_express/Banques/BankAskStateScreen.dart';
 import 'package:solution_express/Banques/BankHomeScreen.dart';
 import 'package:solution_express/Banques/DemandeScreen.dart';
 import 'package:solution_express/screens/BottomBar.dart';
@@ -19,7 +20,7 @@ class _BankNavState extends State<BankNav> {
 List<Widget> _listTab = <Widget>[
     GuideScreen(),
      BankHome(),
-   DemandeScreen(),
+   BankAskStateScreen(),
    ProfilScreen()
 
 ];

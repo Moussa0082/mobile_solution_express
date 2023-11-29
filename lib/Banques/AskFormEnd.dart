@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
+import 'package:solution_express/Banques/BankAskStateScreen.dart';
 
     enum SingingCharacter {Celibataire, Marier }
 
@@ -360,7 +361,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                   if (_formKey.currentState!.validate()) {
                                     debugPrint('Début validation ');
-                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> const AskFormEnd() ));
+                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> const BankAskStateScreen() ));
                                     
                               
                                    

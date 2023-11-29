@@ -16,7 +16,7 @@ class _TypeScreenState extends State<TypeScreen> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBare(),
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Column(

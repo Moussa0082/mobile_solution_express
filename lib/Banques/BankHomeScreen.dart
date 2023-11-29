@@ -14,7 +14,7 @@ class _BankHomeState extends State<BankHome> {
   Widget build(BuildContext context) {
     return 
     Scaffold(
-      appBar: MyAppBar(),
+      appBar: MyAppBare(),
       backgroundColor: Color.fromARGB(255, 194, 191, 191),
       body: SingleChildScrollView(
         child: Column(

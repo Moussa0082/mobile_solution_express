@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:solution_express/constant/Constantes.dart';
 import 'package:solution_express/screens/GuideScreen.dart';
 import 'package:solution_express/screens/LoginScreen.dart';
+import 'package:solution_express/screens/ProfilScreen.dart';
 
 
 
@@ -20,7 +21,7 @@ class _NavState extends State<Nav> {
 
 List<Widget> _listTab = <Widget>[
    GuideScreen(),
-   LoginScreen(),
+   ProfilScreen(),
    
 
 ];

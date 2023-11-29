@@ -1,5 +1,15 @@
+import 'dart:io';
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:solution_express/models/Utilisateur.dart';
+import 'package:solution_express/providers/UtilisateurProvider.dart';
+import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/screens/LoginScreen.dart';
+import 'package:solution_express/services/UtilisateurService.dart';
 
 class RegisterScreen extends StatefulWidget {
   // const RegisterScreen({super.key});
@@ -10,11 +20,16 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
 
-    late AnimationController _controller;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
+   TextEditingController nom_controller = TextEditingController();
+  TextEditingController prenom_controller = TextEditingController();
+  TextEditingController email_controller = TextEditingController();
+  // TextEditingController motDepasse_controller = TextEditingController();
+  // TextEditingController RepmotDePasse_controller = TextEditingController(); 
+
   String value = "";
   String firstName = "";
   String lastName = "";
@@ -24,12 +39,107 @@ class _RegisterScreenState extends State<RegisterScreen> {
   String passwordConfirm = "";
   bool _obscureText = true;
 
+  String? imageSrc;
+  File? images;
+
    
 
+   
+   Future<File> saveImagePermanently(String imagePath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final name = basename(imagePath);
+    final image = File('${directory.path}/$name');
+
+    return File(imagePath).copy(image.path);
+  }
+
+   Future<File?> getImage(ImageSource source) async {
+  final image = await ImagePicker().pickImage(source: source);
+  if (image == null) return null;
+
+  return File(image.path);
+}
+
+
+
+  Future<void> _pickImage() async {
+  try {
+    final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final imagePermanent = await saveImagePermanently(image.path);
+
+      setState(() {
+        this.images = imagePermanent;
+     
+        imageSrc = imagePermanent.path; // Notez l'utilisation de "?"
+      });
+    } else {
+      // L'utilisateur a annulé la sélection d'image.
+      return;
+    }
+  } on PlatformException catch (e) {
+    debugPrint('erreur : $e');
+  }
+}
+
   @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+  void initState() {
+    super.initState();
+    nom_controller.clear();
+    prenom_controller.clear();
+    email_controller.clear();
+    passwordController.clear();
+    passwordConfirmController.clear();
+  }
+
+  Future<void> _ajouterUtilisateur() async {
+    final image = images;
+    final nom = nom_controller.text;
+    final prenom = prenom_controller.text;
+    final email = email_controller.text;
+    final motDePasse = passwordController.text;
+
+    if (nom.isEmpty || prenom.isEmpty || email.isEmpty || motDePasse.isEmpty) {
+      // Gérez le cas où l'email ou le mot de passe est vide.
+      const String errorMessage = "Veuillez remplir tous les champs";
+      debugPrint(errorMessage);
+      return;
+    }
+
+    Utilisateur nouveauUtilisateur;
+
+    try {
+      if(image != null){
+        nouveauUtilisateur = await UtilisateurService.ajouterUtilisateur(
+          nom: nom,
+          prenom: prenom,
+          email: email,
+          motDePasse: motDePasse, image: images as File);
+      }else{
+        nouveauUtilisateur = await UtilisateurService.ajouterUtilisateur(
+          nom: nom,
+          prenom: prenom,
+          email: email,
+          motDePasse: motDePasse
+
+        );
+      }
+
+      nouveauUtilisateur;
+      // Le nouvel utilisateur a été ajouté avec succès, vous pouvez gérer la réponse ici.
+      print('Utilisateur ajouté avec succès : ${nouveauUtilisateur.nom}');
+      nom_controller.clear();
+      prenom_controller.clear();
+      email_controller.clear();
+      passwordController.clear();
+      passwordConfirmController.clear();
+
+    } catch (e) {
+      // Une erreur s'est produite lors de l'ajout de l'utilisateur, vous pouvez gérer l'erreur ici.
+      final String errorMessage = e.toString();
+      debugPrint(errorMessage);
+     
+    }
   }
 
   @override
@@ -96,6 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: prenom_controller,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15)),
@@ -122,6 +233,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: nom_controller,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15),
@@ -177,7 +289,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 10,
                   ),
                   TextFormField(
+                    controller: email_controller,
                     decoration: InputDecoration(
+                      
                         border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15)),
                         labelText: "Email",
@@ -302,7 +416,57 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    onPressed: (){},
+                    onPressed: () async{
+                        
+                    final nom = nom_controller.text;
+                    final prenom = prenom_controller.text;
+                    final email = email_controller.text;
+                    final motDePasse = passwordController.text;
+
+                    if (nom.isEmpty || prenom.isEmpty || email.isEmpty || motDePasse.isEmpty) {
+                      // Gérez le cas où l'email ou le mot de passe est vide.
+                      const String errorMessage = "Veuillez remplir tous les champs";
+                      debugPrint(errorMessage);
+                      return;
+                    }
+
+                    Utilisateur nouveauUtilisateur;
+
+                    try  {
+                      if(images != null){
+                        nouveauUtilisateur = await UtilisateurService.ajouterUtilisateur(
+                            nom: nom,
+                            prenom: prenom,
+                            email: email,
+                            motDePasse: motDePasse, image: images as File);
+                      }else{
+                        nouveauUtilisateur = await UtilisateurService.ajouterUtilisateur(
+                            nom: nom,
+                            prenom: prenom,
+                            email: email,
+                            motDePasse: motDePasse
+
+                        );
+                      }
+
+                      // Provider.of<UtilisateurProvider>(context, listen: false).setUtilisateur(nouveauUtilisateur);
+                      // Le nouvel utilisateur a été ajouté avec succès, vous pouvez gérer la réponse ici.
+                      print('Utilisateur ajouté avec succès : ${nouveauUtilisateur.nom}');
+                      nom_controller.clear();
+                      prenom_controller.clear();
+                      email_controller.clear();
+                      passwordController.clear();
+                      passwordConfirmController.clear();
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginScreen()));
+
+                    } catch (e) {
+                      // Une erreur s'est produite lors de l'ajout de l'utilisateur, vous pouvez gérer l'erreur ici.
+                      final String errorMessage = e.toString();
+                      debugPrint(errorMessage);
+
+                    }
+                  
+                    },
                     style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFF9A6ABB),
                         shape: RoundedRectangleBorder(
@@ -312,7 +476,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   const SizedBox(
                         height: 20,
                       ),
-                       const Text("si vous avez deja un compte ?"),
+                       const Text("si vous avez deja un compte ?", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold,),),
                       GestureDetector(
                           onTap: () {
                             Navigator.push(context,
@@ -321,8 +485,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: const Text(
                             "connecter vous",
                             style: TextStyle(
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
                                 color: Colors.blue,
-                                decoration: TextDecoration.underline),
+                                // decoration: TextDecoration.underline
+                                ),
                           )
                           )
                 ],
