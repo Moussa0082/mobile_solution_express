@@ -3,6 +3,7 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:path/path.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
@@ -11,6 +12,9 @@ import 'package:solution_express/models/Utilisateur.dart';
 import 'package:solution_express/providers/UtilisateurProvider.dart';
 import 'package:solution_express/screens/ProfilScreen.dart';
 import 'package:solution_express/services/UtilisateurService.dart';
+
+
+
 
 class UpdateProfilScreen extends StatefulWidget {
   const UpdateProfilScreen({super.key});
@@ -79,7 +83,7 @@ Future<void> _pickImage(ImageSource source) async {
     final nom = nom_controller.text;
     final prenom = prenom_controller.text;
     final email = email_controller.text;
-
+  BuildContext context = (this.context);
     if (nom.isEmpty || prenom.isEmpty || email.isEmpty) {
       // Gérez le cas où l'email ou le mot de passe est vide.
       const String errorMessage = "Veuillez remplir tous les champs";
@@ -91,22 +95,22 @@ Future<void> _pickImage(ImageSource source) async {
 
     try {
       if (image != null) {
-        utilisateurMaj = await Provider.of<UtilisateurService>(context as BuildContext, listen: false).updateUtilisateur(
+        utilisateurMaj = await Provider.of<UtilisateurService>((this.context), listen: false).updateUtilisateur(
           idUtilisateur: utilisateur.idUtilisateur,
           nom: nom,
           prenom: prenom,
           email: email,
-          photos: image as File,
+          image: image as File,
         );
-        Provider.of<UtilisateurProvider>(context as BuildContext, listen: false).setUtilisateur(utilisateurMaj);
+        Provider.of<UtilisateurProvider>((this.context), listen: false).setUtilisateur(utilisateurMaj);
       } else {
-        utilisateurMaj = await Provider.of<UtilisateurService>(context as BuildContext, listen: false).updateUtilisateur(
+        utilisateurMaj = await Provider.of<UtilisateurService>(context, listen: false).updateUtilisateur(
           idUtilisateur: utilisateur.idUtilisateur,
           nom: nom,
           prenom: prenom,
           email: email
         );
-        Provider.of<UtilisateurProvider>(context as BuildContext, listen: false).setUtilisateur(utilisateurMaj);
+        Provider.of<UtilisateurProvider>((this.context), listen: false).setUtilisateur(utilisateurMaj);
       }
       // showDialog(
       //   context: context, 
@@ -129,8 +133,8 @@ Future<void> _pickImage(ImageSource source) async {
       //   );
       // }
       // );
-
       // Le profil utilisateur a été mis à jour avec succès, vous pouvez gérer la réponse ici.
+      Navigator.pop(context);
       print(
           'Profil utilisateur mis à jour avec succès : ${utilisateurMaj.nom}');
       // Vous pouvez également gérer la navigation vers une autre page après la mise à jour.
@@ -141,11 +145,7 @@ Future<void> _pickImage(ImageSource source) async {
     }
   }
   
-  @override
-  void initState() {
-    
-    super.initState();
-  }
+ 
   List<String> visibilite = [];
 
   Future<void> _showImageSourceDialog() async {
@@ -193,6 +193,16 @@ Future<void> _pickImage(ImageSource source) async {
   );
 }
 
+   @override
+  void initState() {
+    
+    super.initState();
+    utilisateur = Provider.of<UtilisateurProvider>((this.context), listen: false).utilisateur!;
+     nom_controller.text = utilisateur.nom;
+    prenom_controller.text = utilisateur.prenom;
+    email_controller.text = utilisateur.email;
+  }
+
   
   @override
   Widget build(BuildContext context) {
@@ -209,7 +219,30 @@ Future<void> _pickImage(ImageSource source) async {
               Container(
                 
                 margin: EdgeInsets.symmetric(horizontal: 100),
-                child: Stack(
+                child:
+                  utilisateur.image == null ||
+                                      utilisateur.image!.isEmpty
+                                  ? CircleAvatar(
+                                      //backgroundImage: AssetImage("assets/images/avatar.png"),
+                                      //  child: Image.network(utilisateur.photos),
+                                      backgroundColor:
+                                          const Color(0xFF9A6ABB),
+                                      radius: 30,
+                                      child: Text(
+                                        "${utilisateur.prenom.substring(0, 1).toUpperCase()}${utilisateur.nom.substring(0, 1).toUpperCase()}",
+                                        style: const TextStyle(
+                                            fontSize: 25,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            letterSpacing: 2),
+                                      ),
+                                    )
+                                  : 
+                                  // CircleAvatar(
+                                  //     backgroundImage:
+                                  //         NetworkImage(utilisateur.image!),
+                                  //     radius: 30),
+                 Stack(
                 alignment: Alignment.bottomRight,
                   children: [
                     const SizedBox(width: 20,),
@@ -219,14 +252,16 @@ Future<void> _pickImage(ImageSource source) async {
                       image!,
                       fit: BoxFit.cover,
                     )
-                  :   Image.asset('assets/image/bane.png')
+                  : Image.asset('assets/image/bane.png') ,
+                  //  Image.asset('assets/image/bane.png')
                    ),
                          CircleAvatar(
                                 backgroundColor: Color (0xFF9A6ABB),
                                 child:  IconButton(onPressed: () async {
                                  await _showImageSourceDialog();
                                 }, icon: Icon(Icons.camera_alt_outlined),iconSize: 30 ,color: (Colors.white),)),
-                ]),
+                ]
+                ),
               ),
               const SizedBox(height: 10,),
               Padding(
@@ -276,7 +311,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                         Positioned(
                                   
-                                  child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                                  child: Text('Votre prenom', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                                 ),
 
                                 //Text form field 
@@ -378,7 +413,7 @@ Future<void> _pickImage(ImageSource source) async {
                         textAlign: TextAlign.center,
                       ),
                           onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=> ProfilScreen()));
+                            Navigator.pop(context);
                           },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: (Colors.red),

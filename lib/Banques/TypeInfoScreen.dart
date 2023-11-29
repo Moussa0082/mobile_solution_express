@@ -1,10 +1,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:solution_express/Banques/AskFomrOneScreen.dart';
+import 'package:solution_express/models/TypeBanque.dart';
 import 'package:solution_express/widgets/TypeInfoCarousel.dart';
 
 class TypeInfoScreen extends StatefulWidget {
-  const TypeInfoScreen({super.key});
+  const TypeInfoScreen({super.key, required List<TypeBanque> typesBanque});
 
   @override
   State<TypeInfoScreen> createState() => _TypeInfoScreenState();

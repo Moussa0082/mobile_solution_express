@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solution_express/Banques/TypeInfoScreen.dart';
 import 'package:solution_express/Banques/TypesScreen.dart';
+import 'package:solution_express/models/Banque.dart';
+import 'package:solution_express/models/TypeBanque.dart';
+import 'package:solution_express/services/BanqueService.dart';
 import 'package:solution_express/widgets/MyAppBar.dart';
 
 class BankHome extends StatefulWidget {
@@ -10,6 +15,18 @@ class BankHome extends StatefulWidget {
 }
 
 class _BankHomeState extends State<BankHome> {
+
+  late Future<List<Banque>> _futureListBanque;
+
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     _futureListBanque =
+        BanqueService().getListBanque("/read");
+  }
+
   @override
   Widget build(BuildContext context) {
     return 
@@ -20,50 +37,6 @@ class _BankHomeState extends State<BankHome> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 25,),
-        //     Container(
-        //       height: 70,
-        //       child:Container(
-          
-        //   decoration: BoxDecoration(
-        //     color: Colors.white,
-        //     border: Border.all(color: Colors.grey), 
-        //   ),
-        //   child: Row(
-        //     children: [
-        // const SizedBox(height: 130, width: 5,),
-        // CircleAvatar(
-        //   radius: 30,
-        //   backgroundColor: const Color(0xFF9A6ABB),
-        //   child: SizedBox.fromSize(
-        //     size: const Size.fromRadius(60),
-        //     child: ClipOval(
-        //       child: Image.asset(
-        //         'assets/image/me.jpg',
-        //         fit: BoxFit.cover,
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        // const SizedBox(width: 10,),
-        // const Text(
-        //   'Moussa Bane',
-        //   style: TextStyle(color: Color(0xFF9A6ABB), fontSize: 25, fontWeight: FontWeight.bold),
-        // ),
-        // const SizedBox(width: 90,),
-        // CircleAvatar(
-        //   radius: 30,
-        //   backgroundColor:const Color(0xFF9A6ABB),
-        //   child: SizedBox.fromSize(
-        //     child:const  ClipOval(
-        //       child: Icon(Icons.notifications, size: 40,color: Colors.white,),
-        //     ),
-        //   ),
-        // )
-        //     ],
-        //   ),
-        //  ),
-        
-        //    ),
         
            const SizedBox(height: 8,),
            Container(
@@ -78,13 +51,7 @@ class _BankHomeState extends State<BankHome> {
                    decoration: BoxDecoration(
                      color: Colors.white,
                      borderRadius: BorderRadius.circular(30),
-                     // boxShadow: [
-                     //   BoxShadow(
-                     //     color: Colors.grey.shade300,
-                     //     blurRadius: 4,
-                     //     offset: Offset(0, 3),
-                     //   ),
-                     // ],
+               
                    ),
                    child: TextField(
                      decoration: InputDecoration(
@@ -100,13 +67,7 @@ class _BankHomeState extends State<BankHome> {
                  height: 50,
                  width: 50,
                  decoration: BoxDecoration(
-                   // boxShadow: [
-                   //   BoxShadow(
-                   //     color: Colors.grey.shade300,
-                   //     blurRadius: 4,
-                   //     offset: Offset(0, 4),
-                   //   ),
-                   // ],
+                  
                    borderRadius: BorderRadius.all(
                      Radius.circular(25),
                    ),
@@ -145,253 +106,78 @@ class _BankHomeState extends State<BankHome> {
         
             const SizedBox(height:10),
            SingleChildScrollView(
-             child: Wrap(
-               spacing: 6,
-               runSpacing: 6,
-               children: [
-                 // Première ligne
-                 GestureDetector(
-                   onTap: () {
-                     // Navigator.push(
-                     //   context,
-                     //   MaterialPageRoute(
-                     //     builder: (context) => QuizDetail(categorie: 'Categorie1'),
-                     //   ),
-                     // );
-                     Navigator.push(context,MaterialPageRoute(builder: (context)=> TypeScreen() ));
-                   },
-             
-                   child: Container(
-                     width: 165,
-                     height: 165,
-                     decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-             color: Color(0xFFFFFFFF),
-                     ),
-                     child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Image.asset(
-                 'assets/image/bms.png', // Image statique
-                 height: 80,
-                 width: 80,
-               ),
-               SizedBox(height: 10),
-               Text(
-                 'BMS', // Nom statique
-                 style: TextStyle(
-                   color: Color(0xFF9A6ABB),
-                   fontWeight: FontWeight.bold,
-                   fontSize: 15,
-                 ),
-               ),
-             ],
-                     ),
-                   ),
-                 ),
-                 const SizedBox(width:5),
-                 GestureDetector(
-                   onTap: () {
-                                         Navigator.push(context,MaterialPageRoute(builder: (context)=> TypeScreen() ));
-                     // Navigator.push(
-                     //   context,
-                     //   MaterialPageRoute(
-                     //     builder: (context) => 
-                     //     // QuizDetail(categorie: 'Categorie2')
-                     //     ,
-                     //   ),
-                     // );
-                   },
-                   child: Container(
-                     width: 165,
-                     height: 165,
-                     decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-             color: Colors.white,
-                     ),
-                     child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Image.asset(
-                 'assets/image/uba.png', // Image statique
-                 height: 80,
-                 width: 80,
-               ),
-               SizedBox(height: 10),
-               Text(
-                 'UBA', // Nom statique
-                 style: TextStyle(
-                   color: Color(0xFF9A6ABB),
-                   fontWeight: FontWeight.bold,
-                   fontSize: 15,
-                 ),
-               ),
-             ],
-                     ),
-                   ),
-                 ),
-                 GestureDetector(
-                   onTap: () {
-                     // Navigator.push(
-                     //   context,
-                     //   MaterialPageRoute(
-                     //     builder: (context) => 
-                     //     // QuizDetail(categorie: 'Categorie2')
-                     //     ,
-                     //   ),
-                     // );
-                   },
-                   child: Container(
-                     width: 165,
-                     height: 165,
-                     decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-             color: Colors.white,
-                     ),
-                     child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Image.asset(
-                 'assets/image/bnda.png', // Image statique
-                 height: 80,
-                 width: 80,
-               ),
-               SizedBox(height: 10),
-               Text(
-                 'BNDA', // Nom statique
-                 style: TextStyle(
-                   color: Color(0xFF9A6ABB),
-                   fontWeight: FontWeight.bold,
-                   fontSize: 15,
-                 ),
-               ),
-             ],
-                     ),
-                   ),
-                 ),
-                 const SizedBox(width:5),
-                 GestureDetector(
-                   onTap: () {
-                     // Navigator.push(
-                     //   context,
-                     //   MaterialPageRoute(
-                     //     builder: (context) => 
-                     //     // QuizDetail(categorie: 'Categorie2')
-                     //     ,
-                     //   ),
-                     // );
-                   },
-                   child: Container(
-                     width: 165,
-                     height: 165,
-                     decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-             color: Colors.white,
-                     ),
-                     child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Image.asset(
-                 'assets/image/bim.png', // Image statique
-                 height: 80,
-                 width: 80,
-               ),
-               SizedBox(height: 10),
-               Text(
-                 'BIM SA', // Nom statique
-                 style: TextStyle(
-                   color: Color(0xFF9A6ABB),
-                   fontWeight: FontWeight.bold,
-                   fontSize: 15,
-                 ),
-               ),
-             ],
-                     ),
-                   ),
-                 ),
-        
-                 GestureDetector(
-                   onTap: () {
-                     // Navigator.push(
-                     //   context,
-                     //   MaterialPageRoute(
-                     //     builder: (context) => 
-                     //     // QuizDetail(categorie: 'Categorie2')
-                     //     ,
-                     //   ),
-                     // );
-                   },
-                   child: Container(
-                     width: 165,
-                     height: 165,
-                     decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-             color: Colors.white,
-                     ),
-                     child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Image.asset(
-                 'assets/image/ecobank.png', // Image statique
-                 height: 80,
-                 width: 80,
-               ),
-               SizedBox(height: 10),
-               Text(
-                 'ECOBANK', // Nom statique
-                 style: TextStyle(
-                   color: Color(0xFF9A6ABB),
-                   fontWeight: FontWeight.bold,
-                   fontSize: 15,
-                 ),
-               ),
-             ],
-                     ),
-                   ),
-                 ),
-                 const SizedBox(width:5),
-                 GestureDetector(
-                   onTap: () {
-                     // Navigator.push(
-                     //   context,
-                     //   MaterialPageRoute(
-                     //     builder: (context) => 
-                     //     // QuizDetail(categorie: 'Categorie2')
-                     //     ,
-                     //   ),
-                     // );
-                   },
-                   child: Container(
-                     width: 165,
-                     height: 165,
-                     decoration: BoxDecoration(
-             borderRadius: BorderRadius.circular(10),
-             color: Colors.white,
-                     ),
-                     child: Column(
-             mainAxisAlignment: MainAxisAlignment.center,
-             children: [
-               Image.asset(
-                 'assets/image/coris.png', // Image statique
-                 height: 80,
-                 width: 80,
-               ),
-               SizedBox(height: 10),
-               Text(
-                 'CORIS BANK', // Nom statique
-                 style: TextStyle(
-                   color: Color(0xFF9A6ABB),
-                   fontWeight: FontWeight.bold,
-                   fontSize: 15,
-                 ),
-               ),
-             ],
-                     ),
-                   ),
-                 ),
-                 // Ajoutez d'autres catégories ici...
-               ],
-             ),
+            child:
+     Consumer<BanqueService>(
+  builder: (context, banqueService, child) {
+    return Expanded(
+      child: FutureBuilder<List<Banque>>(
+        future: banqueService.getListBanque("/read"),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+
+          if (!snapshot.hasData || snapshot.data!.isEmpty) {
+            return const Center(
+              child: Text("Aucune banque trouvée"),
+            );
+          } else {
+            List<Banque> banques = snapshot.data!;
+
+            return Wrap(
+              spacing: 6,
+              runSpacing: 6,
+              children: banques.map((Banque banque) {
+                return GestureDetector(
+                  onTap: () async {
+                        List<TypeBanque> typesBanque = await BanqueService().getTypeBanqueByIdBanque(banque.idBanque);
+                       Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TypeScreen(typesBanque: typesBanque, banque: banque.nom,),
+                    ),
+                  );
+                    // Faites quelque chose lorsque la banque est sélectionnée
+                  },
+                  child: Container(
+                    width: 165,
+                    height: 165,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.network(
+                        "http://10.0.2.2/" + banque.image,
+                          height: 80,
+                          width: 80,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          banque.nom,
+                          style: TextStyle(
+                            color: Color(0xFF9A6ABB),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }).toList(),
+            );
+          }
+        },
+      ),
+    );
+  },
+)
+
            ),
         
         

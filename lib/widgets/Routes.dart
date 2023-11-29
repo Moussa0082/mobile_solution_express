@@ -10,10 +10,10 @@ import 'package:solution_express/Banques/TypesScreen.dart';
 final Map<String, WidgetBuilder> routes = {
 //  QuizDetail.routeName : (BuildContext context) => QuizDetail(),
   // QuestionPage.routeName: (context) => QuestionPage(),
- ' /typeInfo':(context) => const TypeInfoScreen(),
- ' /typeScreen':(context) => const TypeScreen(),
- '/askOne':(context) => const AskFormOneScreen(),
- '/askTwo':(context) => const AskFormEnd(),
- '/askState': (context) => const BankAskStateScreen(),
+//  ' /typeInfo':(context) => const TypeInfoScreen(),
+//  ' /typeScreen':(context) => const TypeScreen(),
+//  '/askOne':(context) => const AskFormOneScreen(),
+//  '/askTwo':(context) => const AskFormEnd(),
+//  '/askState': (context) => const BankAskStateScreen(),
 
 } ;
