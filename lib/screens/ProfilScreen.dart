@@ -34,12 +34,46 @@ class _ProfilScreenState extends State<ProfilScreen> {
           
           child: Consumer<UtilisateurProvider>(
                 builder: (context, utilisateurProvider, child) {
+                  final utilisateur = utilisateurProvider.utilisateur;
            return  Column(
               children: [
                 const SizedBox(
                   height: 20,
                 ),
-                Image.asset('assets/image/bane.png'),
+                // Image.asset('assets/image/bane.png'),
+                 Container(height: 120,
+                 width: 120,
+                   child: CircleAvatar(
+                    
+                               radius: 30,
+                               backgroundColor: const Color(0xFF9A6ABB),
+                               child: 
+                               SizedBox.fromSize(
+                                 size: const Size.fromRadius(60),
+                                 child: ClipOval(
+                                   child:  utilisateur?.image == null ||
+                                            utilisateur?.image?.isEmpty == true
+                                        ? CircleAvatar(
+                                          
+                                            backgroundColor:  Color(0xFF9A6ABB),
+                                            radius: 30,
+                                            child: Text(
+                                              "${utilisateur!.prenom.substring(0, 1).toUpperCase()}${utilisateur.nom.substring(0, 1).toUpperCase()}",
+                                              style: const TextStyle(
+                                                  fontSize: 25,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                  letterSpacing: 2),
+                                            ),
+                                          ) : CircleAvatar(
+                                            backgroundImage: NetworkImage(
+                                                utilisateur!.image!),
+                                            radius: 30,
+                                  ),
+                              ),
+                           ),
+                      ),
+                 ),
                 const SizedBox(height: 20,),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -72,7 +106,6 @@ class _ProfilScreenState extends State<ProfilScreen> {
                       Expanded(child: 
                        Text("${utilisateurProvider.utilisateur!.prenom.toUpperCase()}",
                        style: TextStyle(color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
-                    
                      
                     ],
                   ),

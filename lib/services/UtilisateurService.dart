@@ -11,7 +11,7 @@ import 'package:solution_express/models/Utilisateur.dart';
 class UtilisateurService extends ChangeNotifier {
 
   static const String apiUrl = 'http://10.0.2.2:8080/user/create'; // Mettez à jour l'URL correcte
-  static const String apiUrl2 = 'http://10.0.2.2:8080/user/update2'; // Mettez à jour l'URL correcte
+  static const String apiUrl2 = 'http://10.0.2.2:8080/user/update'; // Mettez à jour l'URL correcte
    
   
   static Future<Utilisateur> ajouterUtilisateur({
@@ -62,16 +62,16 @@ class UtilisateurService extends ChangeNotifier {
       required String prenom,
       required String email,
        String? motDePasse,
-      File? photos,
+      File? image,
     }) async {
       try {
         var request = http.MultipartRequest('PUT', Uri.parse('$apiUrl2/$idUtilisateur'));
         // request.headers.addAll({"Authorization": "Bearer token"});
 
-        if (photos != null) {
+        if (image != null) {
           request.files.add(
-            http.MultipartFile('photo', photos.readAsBytes().asStream(), photos.lengthSync(),
-                filename: basename(photos.path),
+            http.MultipartFile('image', image.readAsBytes().asStream(), image.lengthSync(),
+                filename: basename(image.path),
             ),
           );
         }
@@ -81,7 +81,7 @@ class UtilisateurService extends ChangeNotifier {
           'prenom': prenom,
           'email': email,
           'motDePasse': motDePasse,
-          'photos': "",
+          'image': "",
         });
 
         var response = await request.send();
