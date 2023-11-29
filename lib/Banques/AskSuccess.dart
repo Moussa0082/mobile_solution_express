@@ -1,8 +1,8 @@
 
 
-
 // import 'package:flutter/material.dart';
 // import 'package:lottie/lottie.dart';
+// import 'package:solution_express/Banques/BankHomeScreen.dart';
 
 // class Loading extends StatefulWidget {
 //   const Loading({super.key});
@@ -22,7 +22,7 @@
 //            splash: Lottie.asset("assets/lottie.json"),
 //            splashIconSize: 70,
 //            duration: 9000,
-//       nextScreen: const BankHomeScreen(),
+//       nextScreen: const BankHome(),
 //       splashTransition: SplashTransition.rotationTransition,
 //       // pageTransitionType: PageTransitionType.scale,
 //     );
