@@ -17,7 +17,7 @@ class BankHome extends StatefulWidget {
 class _BankHomeState extends State<BankHome> {
 
   late Future<List<Banque>> _futureListBanque;
-
+      TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -25,6 +25,14 @@ class _BankHomeState extends State<BankHome> {
     super.initState();
      _futureListBanque =
         BanqueService().getListBanque("/read");
+        _searchController;
+  }
+
+
+   @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -54,6 +62,7 @@ class _BankHomeState extends State<BankHome> {
                
                    ),
                    child: TextField(
+                    controller: _searchController,
                      decoration: InputDecoration(
                        hintText: 'Rechercher',
                        contentPadding: EdgeInsets.all(10),
@@ -123,8 +132,16 @@ class _BankHomeState extends State<BankHome> {
             return const Center(
               child: Text("Aucune banque trouvée"),
             );
-          } else {
-            List<Banque> banques = snapshot.data!;
+          } 
+          else {
+                      // Filtrer la liste des banques en fonction du texte de recherche
+                      List<Banque> banques = snapshot.data!
+                          .where((banque) => banque.nom
+                              .toLowerCase()
+                              .contains(_searchController.text.toLowerCase()))
+                          .toList();
+          // else {
+          //   List<Banque> banques = snapshot.data!;
 
             return Wrap(
               spacing: 6,
