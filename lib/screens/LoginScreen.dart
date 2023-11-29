@@ -18,7 +18,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
 
-     late AnimationController _controller;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -39,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
     // final String baseUrl = 'https://buget-service-api-git.onrender.com/utilisateur'; // Remplacez par la base URL de votre API.
     final String email = emailController.text;
     final String password = motDePasseController.text;
-    // UtilisateurProvider utilisateurProvider = Provider.of<UtilisateurProvider>(context, listen: false);
+    UtilisateurProvider utilisateurProvider = Provider.of<UtilisateurProvider>(context, listen: false);
 
     if (email.isEmpty || password.isEmpty) {
 
@@ -96,10 +95,10 @@ class _LoginScreenState extends State<LoginScreen> {
           // Autres champs...
         );
         // Créez une instance de la classe Utilisateur avec ces données.
-        // final utilisateurConnecte = utilisateur;
+        final utilisateurConnecte = utilisateur;
         // Affichez les informations de l'utilisateur dans votre interface utilisateur (UI).
         // Stockez l'utilisateur dans UtilisateurProvider.
-        // utilisateurProvider.setUtilisateur(utilisateur);
+        utilisateurProvider.setUtilisateur(utilisateur);
         Navigator.push(context,MaterialPageRoute(builder: (context) => Nav()));
         // Navigator.pushNamed(
         //   context,

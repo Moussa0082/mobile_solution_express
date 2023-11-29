@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:solution_express/models/Utilisateur.dart';
+import 'package:solution_express/providers/UtilisateurProvider.dart';
 import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/screens/UpdateProfilScreen.dart';
 
@@ -11,6 +14,17 @@ class ProfilScreen extends StatefulWidget {
 }
 
 class _ProfilScreenState extends State<ProfilScreen> {
+
+  late Utilisateur utilisateur;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+      utilisateur = Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
+  
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,89 +32,93 @@ class _ProfilScreenState extends State<ProfilScreen> {
       body: SingleChildScrollView(
         child: Container(
           
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 20,
-              ),
-              Image.asset('assets/image/bane.png'),
-              const SizedBox(height: 20,),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  
-                  children: [
-                    const SizedBox(width: 40,),
-                   
-                    const Text('Nom   :', 
-                    style: TextStyle( color: Color(0xFF9A6ABB),fontWeight:FontWeight.w600, fontSize: 20, ),),
-                    const SizedBox(height: 5,width: 40,),
-                    Expanded(child: const 
-                    Text('BANE', 
-                    style: TextStyle( color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
-            
-                  ],
+          child: Consumer<UtilisateurProvider>(
+                builder: (context, utilisateurProvider, child) {
+           return  Column(
+              children: [
+                const SizedBox(
+                  height: 20,
                 ),
-              ),
-              // Email 
-              const SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  
-                  children: [
-                    const SizedBox(width: 40,),
-                    const Text('Prenom   :', 
-                    style: TextStyle(color: Color(0xFF9A6ABB),fontWeight:FontWeight.w600, fontSize: 20, ),),
-                    const SizedBox(height: 5,width: 40,),
-                    Expanded(child: 
-                    const Text('Moussa',
-                     style: TextStyle(color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
-                  
-                   
-                  ],
+                Image.asset('assets/image/bane.png'),
+                const SizedBox(height: 20,),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    
+                    children: [
+                      const SizedBox(width: 40,),
+                     
+                      const Text('Nom   :', 
+                      style: TextStyle( color: Color(0xFF9A6ABB),fontWeight:FontWeight.w600, fontSize: 20, ),),
+                      const SizedBox(height: 5,width: 40,),
+                      Expanded(child:  
+                      Text(
+                        "${utilisateurProvider.utilisateur!.nom.toUpperCase()}", 
+                      style: TextStyle( color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
+                    ],
+                  ),
                 ),
-              ),
-        
-              const SizedBox(height: 10,),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Row(
-                  
-                  children: [
-                    const SizedBox(width: 40,),
-                    const Text( 'Email   :', 
-                    style: TextStyle(color: Color(0xFF9A6ABB), fontWeight:FontWeight.w600, fontSize: 20, ),),
-                    const SizedBox(height: 5,width: 40,),
-                    Expanded(child: 
-                    const Text('bane8251@gmail.com',
-                     style: TextStyle(color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
-                  
-                   
-                  ],
+                // Email 
+                const SizedBox(height: 10,),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    
+                    children: [
+                      const SizedBox(width: 40,),
+                      const Text('Prenom   :', 
+                      style: TextStyle(color: Color(0xFF9A6ABB),fontWeight:FontWeight.w600, fontSize: 20, ),),
+                      const SizedBox(height: 5,width: 40,),
+                      Expanded(child: 
+                       Text("${utilisateurProvider.utilisateur!.prenom.toUpperCase()}",
+                       style: TextStyle(color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
+                    
+                     
+                    ],
+                  ),
                 ),
-              ),
-              const SizedBox(height:10 ,),
-        ElevatedButton(
-                      child: Text(
-                        "Deconnexion",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    
+                const SizedBox(height: 10,),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    
+                    children: [
+                      const SizedBox(width: 40,),
+                      const Text( 'Email   :', 
+                      style: TextStyle(color: Color(0xFF9A6ABB), fontWeight:FontWeight.w600, fontSize: 20, ),),
+                      const SizedBox(height: 5,width: 40,),
+                      Expanded(child: 
+                       Text("${utilisateurProvider.utilisateur!.email}",
+                       style: TextStyle(color: Color(0xFF9A6ABB),fontSize: 20,fontWeight: FontWeight.bold),)),
+                    
+                     
+                    ],
+                  ),
+                ),
+                const SizedBox(height:10 ,),
+                    ElevatedButton(
+                        child: Text(
+                          "Deconnexion",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
+                        onPressed: 
+                          (){},
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFF9A6ABB),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(15)),
+                            minimumSize: Size(300, 40)),
                       ),
-                      onPressed: 
-                        (){},
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF9A6ABB),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          minimumSize: Size(300, 40)),
-                    ),
-        
-            ],
+                    
+              ],
+            );
+           }
           ),
         
         ),

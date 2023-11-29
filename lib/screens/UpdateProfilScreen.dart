@@ -6,7 +6,11 @@ import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:solution_express/models/Utilisateur.dart';
+import 'package:solution_express/providers/UtilisateurProvider.dart';
 import 'package:solution_express/screens/ProfilScreen.dart';
+import 'package:solution_express/services/UtilisateurService.dart';
 
 class UpdateProfilScreen extends StatefulWidget {
   const UpdateProfilScreen({super.key});
@@ -16,9 +20,15 @@ class UpdateProfilScreen extends StatefulWidget {
 }
 
 class _UpdateProfilScreenState extends State<UpdateProfilScreen> {
-  
-    File? image;
+
+  TextEditingController nom_controller = TextEditingController();
+  TextEditingController prenom_controller = TextEditingController();
+  TextEditingController email_controller = TextEditingController();
   String? imageSrc;
+  File? image;
+  
+  late Utilisateur utilisateur;
+
    
   Future<File> saveImagePermanently(String imagePath) async {
     final directory = await getApplicationDocumentsDirectory();
@@ -63,6 +73,73 @@ Future<void> _pickImage(ImageSource source) async {
 
   final _formKey = GlobalKey<FormState>();
   //radio
+
+    Future<void> _updateUtilisateur() async {
+    final utilisateurId = utilisateur.idUtilisateur;
+    final nom = nom_controller.text;
+    final prenom = prenom_controller.text;
+    final email = email_controller.text;
+
+    if (nom.isEmpty || prenom.isEmpty || email.isEmpty) {
+      // Gérez le cas où l'email ou le mot de passe est vide.
+      const String errorMessage = "Veuillez remplir tous les champs";
+      debugPrint(errorMessage);
+      return;
+    }
+
+    Utilisateur utilisateurMaj;
+
+    try {
+      if (image != null) {
+        utilisateurMaj = await Provider.of<UtilisateurService>(context as BuildContext, listen: false).updateUtilisateur(
+          idUtilisateur: utilisateur.idUtilisateur,
+          nom: nom,
+          prenom: prenom,
+          email: email,
+          photos: image as File,
+        );
+        Provider.of<UtilisateurProvider>(context as BuildContext, listen: false).setUtilisateur(utilisateurMaj);
+      } else {
+        utilisateurMaj = await Provider.of<UtilisateurService>(context as BuildContext, listen: false).updateUtilisateur(
+          idUtilisateur: utilisateur.idUtilisateur,
+          nom: nom,
+          prenom: prenom,
+          email: email
+        );
+        Provider.of<UtilisateurProvider>(context as BuildContext, listen: false).setUtilisateur(utilisateurMaj);
+      }
+      // showDialog(
+      //   context: context, 
+      // builder: (BuildContext context){
+      //   return AlertDialog(
+      //     title: const Center(
+      //       child:  Text('Succèss'),
+      //     ),
+      //     content: Text('Profil modifier avec succèss'),
+      //     actions: <Widget>[
+      //      TextButton(
+      //        onPressed:() {
+      //        Navigator.of(
+      //        context).pop();},
+      //         child:
+      //          const Text(
+      //           'Ok'),
+      //        )
+      //       ],                                                     
+      //   );
+      // }
+      // );
+
+      // Le profil utilisateur a été mis à jour avec succès, vous pouvez gérer la réponse ici.
+      print(
+          'Profil utilisateur mis à jour avec succès : ${utilisateurMaj.nom}');
+      // Vous pouvez également gérer la navigation vers une autre page après la mise à jour.
+    } catch (e) {
+      // Une erreur s'est produite lors de la mise à jour du profil utilisateur, vous pouvez gérer l'erreur ici.
+      final String errorMessage = e.toString();
+      debugPrint(errorMessage);
+    }
+  }
   
   @override
   void initState() {
@@ -164,6 +241,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                                  controller: nom_controller,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -203,6 +281,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                                  controller: prenom_controller,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -236,11 +315,13 @@ Future<void> _pickImage(ImageSource source) async {
                   children: [
                         Positioned(
                                   
-                                  child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                                  child: Text('Votre adresse email', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                                 ),
 
                                 //Text form field 
+
                                  TextFormField(
+                                  controller: email_controller,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -277,7 +358,7 @@ Future<void> _pickImage(ImageSource source) async {
                         textAlign: TextAlign.center,
                       ),
                       onPressed: 
-                        (){},
+                        _updateUtilisateur,
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFF9A6ABB),
                           shape: RoundedRectangleBorder(

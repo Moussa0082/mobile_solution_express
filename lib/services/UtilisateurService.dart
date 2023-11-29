@@ -61,7 +61,7 @@ class UtilisateurService extends ChangeNotifier {
       required String nom,
       required String prenom,
       required String email,
-      required String motDePasse,
+       String? motDePasse,
       File? photos,
     }) async {
       try {

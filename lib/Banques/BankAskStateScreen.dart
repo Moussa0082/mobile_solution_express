@@ -19,7 +19,7 @@ class _BankAskStateScreenState extends State<BankAskStateScreen> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: 
-        MyAppBar(),
+        MyAppBare(),
 
       backgroundColor: Color.fromARGB(252, 247, 246, 246),
       body: SingleChildScrollView(

@@ -16,7 +16,7 @@ class _GuideScreenState extends State<GuideScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:MyAppBar(),
+      appBar:MyAppBare(),
       backgroundColor: Color.fromARGB(255, 194, 191, 191),
       body: Column(
         children: <Widget>[

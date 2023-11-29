@@ -16,6 +16,7 @@ class _TypeInfoScreenState extends State<TypeInfoScreen> {
     return  Scaffold(
       appBar: AppBar(
         title: Text('Compte courant', style: TextStyle(color: Color(0xFF9A6ABB), fontSize: 20),) ,
+      centerTitle: true,
       ),
       backgroundColor: Color.fromARGB(255, 231, 229, 229),
       body: SingleChildScrollView(
