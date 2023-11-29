@@ -9,6 +9,7 @@ import 'package:solution_express/widgets/MyAppBar.dart';
 class TypeScreen extends StatefulWidget {
     final List<TypeBanque> typesBanque;
     String banque = "";
+    
 
     TypeScreen({ super.key, required this.typesBanque, required this.banque});
 
@@ -49,14 +50,16 @@ class _TypeScreenState extends State<TypeScreen> {
                   return GestureDetector(
                     onTap: () {
                       // Naviguez vers la page TypeInfoScreen avec les données du typeBanque
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => TypeInfoScreen(
-                      //       typeBanque: typeBanque,
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TypeInfoScreen(
+                            description: typeBanque.description,
+                            nom: typeBanque.nom,
+                            banque: typeBanque.banque!.nom,
+                          ),
+                        ),
+                      );
                     },
                     child: Container(
                       width: 165,
