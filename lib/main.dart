@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:solution_express/providers/TypeBanqueProvider.dart';
 import 'package:solution_express/providers/UtilisateurProvider.dart';
 import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/screens/GuideScreen.dart';
@@ -11,14 +12,15 @@ import 'package:solution_express/services/DemandeService.dart';
 import 'package:solution_express/services/UtilisateurService.dart';
 
 
-   
 void main() {
   
   runApp(
       MultiProvider(
        providers: [
+
          ChangeNotifierProvider(create: (context) => BottomNavigationService()),
          ChangeNotifierProvider(create: (context) => DemandeService()),
+         ChangeNotifierProvider(create: (context) => TypeBanqueProvider()),
          ChangeNotifierProvider(create: (context) => UtilisateurProvider()),
          ChangeNotifierProvider(create: (context) => UtilisateurService()),
           ChangeNotifierProvider(create: (context) => BanqueService()),

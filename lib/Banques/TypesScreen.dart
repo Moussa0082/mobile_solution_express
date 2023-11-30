@@ -57,7 +57,7 @@ class _TypeScreenState extends State<TypeScreen> {
                             description: typeBanque.description,
                             nom: typeBanque.nom,
                             banque: typeBanque.banque!.nom,
-                            // typesBanque:typeBanque,
+                            typesBanque:typeBanque,
                           ),
                         ),
                       );

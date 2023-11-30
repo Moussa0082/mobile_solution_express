@@ -83,7 +83,7 @@ Future<void> _pickImage(ImageSource source) async {
     final nom = nom_controller.text;
     final prenom = prenom_controller.text;
     final email = email_controller.text;
-  BuildContext context = (this.context);
+    BuildContext context = (this.context);
     if (nom.isEmpty || prenom.isEmpty || email.isEmpty) {
       // Gérez le cas où l'email ou le mot de passe est vide.
       const String errorMessage = "Veuillez remplir tous les champs";

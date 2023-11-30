@@ -6,16 +6,20 @@ import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:solution_express/Banques/AskFormEnd.dart';
 import 'package:solution_express/models/Demande.dart';
 import 'package:solution_express/models/TypeBanque.dart';
 import 'package:solution_express/models/Utilisateur.dart';
+import 'package:solution_express/providers/UtilisateurProvider.dart';
   enum SingingCharacter { masculin, feminin }
 
 class AskFormOneScreen extends StatefulWidget {
   // late TypeBanque typeBanque;
   String nom ="";
-   AskFormOneScreen({super.key, required this.nom});
+ final typesBanque;
+
+   AskFormOneScreen({super.key, required this.nom, required this.typesBanque});
 
   @override
   State<AskFormOneScreen> createState() => _AskFormOneScreenState();
@@ -25,11 +29,8 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
 
    File? image;
   String? imageSrc;
- late TypeBanque typeBanque;
- late Utilisateur utilisateur;
+//  late TypeBanque typeBanque;
 
-
- 
 
   // Fonction pour créer un bouton
   Widget buildButton({
@@ -97,10 +98,19 @@ Future<void> _pickImage(ImageSource source) async {
     SingingCharacter? _character = SingingCharacter.masculin;
     // radio var 
   
+ late Utilisateur utilisateur;
+//  late TypeBanque typeBanque;
+
   @override
   void initState() {
     
     super.initState();
+   BuildContext context = (this.context);
+    utilisateur =
+        Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
+    // adresseController.clear();
+    // datenaissController.clear();
+    // numeroController.clear();        
   }
 
   Future<void> _showImageSourceDialog() async {
@@ -159,297 +169,257 @@ Future<void> _pickImage(ImageSource source) async {
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(3),
-              height: 200,
-              width: double.infinity,
-              child: (image != null)
-                  ? Image.file(
-                      image!,
-                      width: double.infinity,
-                      height: double.infinity,
-                      fit: BoxFit.cover,
-                    )
-                  : Container(
-                      decoration:const BoxDecoration(
-                          image: DecorationImage(
-                        image:  AssetImage('assets/image/background.jpg'),
+        child: Form(
+          // key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                padding: EdgeInsets.all(3),
+                height: 200,
+                width: double.infinity,
+                child: (image != null)
+                    ? Image.file(
+                        image!,
+                        width: double.infinity,
+                        height: double.infinity,
                         fit: BoxFit.cover,
-                      ),
-                      ),
-                      child: Center(
-                          child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Photo d'identité",
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontFamily: 'Poppins',
-                            ),
-                          ),
-                          buildButton(
-                            title: 'Choisir image',
-                            icon: Icons.image,
-                            onClicked: () => _showImageSourceDialog(),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-              ),
-            SizedBox(
-              height: 10,
-            ),
-            Container(
-                margin: EdgeInsets.all(3),
-                padding: EdgeInsets.all(20),
-                child: Form(
-                    key: _formKey,
-                    child: Column(children: <Widget>[
-                      Column(
-                          
+                      )
+                    : Container(
+                        decoration:const BoxDecoration(
+                            image: DecorationImage(
+                          image:  AssetImage('assets/image/background.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                        ),
+                        child: Center(
+                            child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-
-                            const SizedBox(height:10),
-                            Column(
-                                crossAxisAlignment: CrossAxisAlignment.start, 
-                              children: [
-                                // label 
-
-                                Positioned(
-                                  
-                                  child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
-                                ),
-
-                                //Text form field 
-                                 TextFormField(
-                                  controller:adresseController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                           borderSide: BorderSide(
-                          color: Color(0xFF9A6ABB),
-                            ),
-                            borderRadius: BorderRadius.circular(15)),
-                        labelText: "Adresse",
-                        hintText: "Entrez votre adresse",
-                       ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Veillez entrez votre adresse";
-                      } else {
-                        return null;
-                      }
-                    },
-                    // onSaved: (val) => email = val!,
-                  ),
-                //  fin textform field 
-                const SizedBox(height:10),
-                                // label 
-                                Positioned(
-                                  
-                                  child: Text('Votre date de naissance', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
-                                ),
-
-                                //Text form field 
-                                 TextFormField(
-                                  controller:datenaissController,
-                                  onTap: () async {
-                                        DateTime? pickedDate = await showDatePicker(
-                                            context: context,
-                                            initialDate: DateTime.now(),
-                                            firstDate: DateTime(1950),
-                                            //DateTime.now() - not to allow to choose before today.
-                                            lastDate: DateTime(2100));
-                                        if (pickedDate != null) {
-                                          print(pickedDate);
-                                          String formattedDate =
-                                              DateFormat('yyyy-MM-dd')
-                                                  .format(pickedDate);
-                                          print(formattedDate);
-                                          setState(() {
-                                            datenaissController.text =
-                                                formattedDate;
-                                          });
-                                        } else {}
-                                      },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                           borderSide: BorderSide(
-                          color: Color(0xFF9A6ABB),
-                            ),
-                            borderRadius: BorderRadius.circular(15)),
-                        labelText: "Date de naisance",
-                        hintText: "Entrez votre date de naissance",
-                       ),
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Veillez entrez votre date de naissance";
-                      } else {
-                        return null;
-                      }
-                    },
-                    // onSaved: (val) => email = val!,
-                  ),
-                //  fin textform field 
-                const SizedBox(height:10),
-                                // label 
-                                Positioned(
-                                  
-                                  child: Text('Votre numéro de telephone', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
-                                ),
-
-                                //Text form field 
-                                 TextFormField(
-                                  controller:numeroController,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                           borderSide: BorderSide(
-                          color: Color(0xFF9A6ABB),
-                            ),
-                            borderRadius: BorderRadius.circular(15)),
-                        labelText: "Téléphone",
-                        hintText: "Entrez votre numero de telephone",
-                       ),
-                    keyboardType: TextInputType.number,
-                    validator: (val) {
-                      if (val == null || val.isEmpty) {
-                        return "Veillez entrez votre numéro de telephone";
-                      } else {
-                        return null;
-                      }
-                    },
-                    // onSaved: (val) => email = val!,
-                  ),
-                //  fin textform field 
-
-                  //radio button
-                         SizedBox(height: 10,),
-                     
-                                Positioned(child: const Text("Votre sexe ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),)),
-                              ],
-                            ),
-
-                            SizedBox(
-                              height: 5,
-                            ),
-   
-                  
-                            Row(
-
-                              children: [
-                            
-                                 Radio<SingingCharacter>(
-                            value: SingingCharacter.masculin,
-                            groupValue: _character,
-                            onChanged: (SingingCharacter? value) {
-                              setState(() {
-                                _character = value;
-                              });
-                            },
-                          ),
-                          const Text('Masculin' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB),),),
-                          const SizedBox(width:100),
-                          Radio<SingingCharacter>(
-                            value: SingingCharacter.feminin,
-                            groupValue: _character,
-                            onChanged: (SingingCharacter? value) {
-                              setState(() {
-                                _character = value;
-                              });
-                            },
-                          ),
-                          const Text('Féminin', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)),),
-                               
-                              ],
-                            ),
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal:50.0),
-                              child: ElevatedButton(
-                                onPressed: () async {
-
-                                  if (_formKey.currentState!.validate()) {
-                                    debugPrint('Début validation ');
-                                    Demande demande = Demande(
-        adresse: adresseController.text,
-        dateNaiss: datenaissController.text,
-        numeroUser: numeroController.text,
-        sexe: _character?.toString(),
-        typeBanque:typeBanque,
-        utilisateur:utilisateur,
-          );
-                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>  AskFormEnd(demande:demande) ));
-                                    
-                              
-                                   
-                              
-                                    // Question question = Question(
-                                    //   questionId: null,
-                                    //   point: 50,
-                                    //   text: textController.text,
-                                    //   type: type.first,
-                                    //   rank: 1,
-                                    //   rankResponse: 1,
-                                    //   choises:
-                                    //       choisesList, // Utilisez la liste de Choise créée précédemment
-                                    // );
-                              
-                                    // // Vous pouvez ensuite ajouter cette question à votre base de données, par exemple, en utilisant votre service QuestionService.
-                                    // QuestionService Q_service = QuestionService();
-                                    // Question? q = await Q_service.createQuestion(
-                                    //     1, 1, question);
-                                    // if (q != null) {
-                                    //   // L'insertion a réussi, redirigez vers la page SuccessPage
-                                    //   Navigator.push(
-                                    //     context,
-                                    //     MaterialPageRoute(
-                                    //       builder: (context) =>
-                                    //           const SuccessPage(),
-                                    //     ),
-                                    //   );
-                                    // } else {
-                                    //   // L'insertion a échoué, affichez un message d'erreur ou effectuez une autre action
-                                    //   // Vous pouvez également ajouter un traitement spécifique en cas d'échec ici
-                                    // }
-                              
-                                    // Affichez les informations de la question et de ses choix
-                                    // debugPrint(question.toJson().toString());
-                              
-                                    // ChoixService choixService = ChoixService();
-                                    // await choixService.createChoix(1, 1, 1, choises);
-                              
-                                    print("Demande envoyer avec succès");
-                                  } else {
-                                    print("Demande non envoyer");
-                                  }
-                                },
-                                child: Text('Continuer', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)), ),
-                                style: ElevatedButton.styleFrom(
-                                  fixedSize: Size(250,40),
-                                  backgroundColor:Color.fromARGB(255, 240, 237, 241) ,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  // padding: EdgeInsets.symmetric(
-                                  //   vertical: 20, // Espacement vertical
-                                  //   horizontal: 30, // Espacement horizontal
-                                  // ),
-                                ),
+                            Text(
+                              "Photo d'identité",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: 'Poppins',
                               ),
                             ),
-                           
-                          ]
+                            buildButton(
+                              title: 'Choisir image',
+                              icon: Icons.image,
+                              onClicked: () => _showImageSourceDialog(),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                  margin: EdgeInsets.all(3),
+                  padding: EdgeInsets.all(20),
+                  child: Column(children: <Widget>[
+                    Column(
+                        
+                        children: [
+                            
+                          const SizedBox(height:10),
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.start, 
+                            children: [
+                              // label 
+                            
+                              Positioned(
+                                
+                                child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                              ),
+                            
+                              //Text form field 
+                               TextFormField(
+                                controller:adresseController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                         borderSide: BorderSide(
+                        color: Color(0xFF9A6ABB),
                           ),
-                    ]
-                    ),
-                    ),
-            ),
-          ],
+                          borderRadius: BorderRadius.circular(15)),
+                      labelText: "Adresse",
+                      hintText: "Entrez votre adresse",
+                     ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return "Veillez entrez votre adresse";
+                    } else {
+                      return null;
+                    }
+                  },
+                  // onSaved: (val) => email = val!,
+                                      ),
+                                    //  fin textform field 
+                                    const SizedBox(height:10),
+                              // label 
+                              Positioned(
+                                
+                                child: Text('Votre date de naissance', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                              ),
+                            
+                              //Text form field 
+                               TextFormField(
+                                controller:datenaissController,
+                                onTap: () async {
+                                      DateTime? pickedDate = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1950),
+                                          //DateTime.now() - not to allow to choose before today.
+                                          lastDate: DateTime(2100));
+                                      if (pickedDate != null) {
+                                        print(pickedDate);
+                                        String formattedDate =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(pickedDate);
+                                        print(formattedDate);
+                                        setState(() {
+                                          datenaissController.text =
+                                              formattedDate;
+                                        });
+                                      } else {}
+                                    },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                         borderSide: BorderSide(
+                        color: Color(0xFF9A6ABB),
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                      labelText: "Date de naisance",
+                      hintText: "Entrez votre date de naissance",
+                     ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return "Veillez entrez votre date de naissance";
+                    } else {
+                      return null;
+                    }
+                  },
+                  // onSaved: (val) => email = val!,
+                                      ),
+                                    //  fin textform field 
+                                    const SizedBox(height:10),
+                              // label 
+                              Positioned(
+                                
+                                child: Text('Votre numéro de telephone', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                              ),
+                            
+                              //Text form field 
+                               TextFormField(
+                                controller:numeroController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                         borderSide: BorderSide(
+                        color: Color(0xFF9A6ABB),
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                      labelText: "Téléphone",
+                      hintText: "Entrez votre numero de telephone",
+                     ),
+                  keyboardType: TextInputType.number,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return "Veillez entrez votre numéro de telephone";
+                    } else {
+                      return null;
+                    }
+                  },
+                  // onSaved: (val) => email = val!,
+                                      ),
+                                    //  fin textform field 
+                            
+                                      //radio button
+                       SizedBox(height: 10,),
+                   
+                              Positioned(child: const Text("Votre sexe ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),)),
+                            ],
+                          ),
+                            
+                          SizedBox(
+                            height: 5,
+                          ),
+                               
+                                      
+                          Row(
+                            
+                            children: [
+                          
+                               Radio<SingingCharacter>(
+                          value: SingingCharacter.masculin,
+                          groupValue: _character,
+                          onChanged: (SingingCharacter? value) {
+                            setState(() {
+                              _character = value;
+                            });
+                          },
+                        ),
+                        const Text('Masculin' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB),),),
+                        const SizedBox(width:100),
+                        Radio<SingingCharacter>(
+                          value: SingingCharacter.feminin,
+                          groupValue: _character,
+                          onChanged: (SingingCharacter? value) {
+                            setState(() {
+                              _character = value;
+                            });
+                          },
+                        ),
+                        const Text('Féminin', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)),),
+                             
+                            ],
+                          ),
+                            
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal:50.0),
+                            child: ElevatedButton(
+                              onPressed: ()  {
+                            
+                                 final adresse = adresseController.text;
+                                 final dateNaiss = datenaissController.text;
+                                 final numeroUser = numeroController.text;
+                                 final sexe = _character.toString();
+                            // if(_formKey.currentState!.validate()){
+                                  debugPrint('Début validation ' );
+                           
+                                
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>  AskFormEnd(typeBanque: widget.typesBanque , nom: widget.nom,adresse: adresse, dateNaiss: dateNaiss,numeroUser: numeroUser,sexe: sexe,) ));
+                               
+                                  
+                            
+                                  print("Demande envoyer avec succès");
+                                
+                              },
+                              child: Text('Continuer', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)), ),
+                              style: ElevatedButton.styleFrom(
+                                fixedSize: Size(250,40),
+                                backgroundColor:Color.fromARGB(255, 240, 237, 241) ,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                // padding: EdgeInsets.symmetric(
+                                //   vertical: 20, // Espacement vertical
+                                //   horizontal: 30, // Espacement horizontal
+                                // ),
+                              ),
+                            ),
+                          ),
+                         
+                        ]
+                        ),
+                  ]
+                  ),
+              ),
+            ],
+          ),
         ),
       ),
     );

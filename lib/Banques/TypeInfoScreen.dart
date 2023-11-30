@@ -9,15 +9,22 @@ class TypeInfoScreen extends StatefulWidget {
   String description = "";
   String nom = "";
   String banque = "";
-  // late TypeBanque typesBanque;
-   TypeInfoScreen({super.key, required this.description, required this.nom, required this.banque});
+  late TypeBanque typesBanque;
+   TypeInfoScreen({super.key, required this.description, required this.nom, required this.banque, required this.typesBanque});
   @override
   State<TypeInfoScreen> createState() => _TypeInfoScreenState();
 }
 
 class _TypeInfoScreenState extends State<TypeInfoScreen> {
 
-   late TypeBanque typeBanque;
+  //  late TypeBanque typeBanque;
+
+ @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    debugPrint(widget.typesBanque.nom);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +49,9 @@ class _TypeInfoScreenState extends State<TypeInfoScreen> {
              style:TextStyle(fontSize: 25, color: Color(0xFF9A6ABB), fontWeight: FontWeight.bold) ,),
             const SizedBox(height:10),
             ElevatedButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>AskFormOneScreen(nom:widget.nom)),);
+              Navigator.push(context,
+               MaterialPageRoute(builder:
+                (context)=>AskFormOneScreen(nom:widget.nom,typesBanque: widget.typesBanque,)),);
             }, child: Text('Faire une demande', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFFFFFFFF), ),
              ), style: ElevatedButton.styleFrom( shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
