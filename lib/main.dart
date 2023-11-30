@@ -7,6 +7,7 @@ import 'package:solution_express/screens/LoginScreen.dart';
 import 'package:solution_express/screens/SplashScreen.dart';
 import 'package:solution_express/services/BanqueService.dart';
 import 'package:solution_express/services/BottomNavigationService.dart';
+import 'package:solution_express/services/DemandeService.dart';
 import 'package:solution_express/services/UtilisateurService.dart';
 
 
@@ -17,9 +18,10 @@ void main() {
       MultiProvider(
        providers: [
          ChangeNotifierProvider(create: (context) => BottomNavigationService()),
+         ChangeNotifierProvider(create: (context) => DemandeService()),
          ChangeNotifierProvider(create: (context) => UtilisateurProvider()),
          ChangeNotifierProvider(create: (context) => UtilisateurService()),
-          ChangeNotifierProvider(create: (_) => BanqueService()),
+          ChangeNotifierProvider(create: (context) => BanqueService()),
        ],
        child:  const MyApp()),
   );

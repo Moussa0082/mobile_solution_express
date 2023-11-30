@@ -7,10 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:solution_express/Banques/AskFormEnd.dart';
+import 'package:solution_express/models/Demande.dart';
+import 'package:solution_express/models/TypeBanque.dart';
+import 'package:solution_express/models/Utilisateur.dart';
   enum SingingCharacter { masculin, feminin }
 
 class AskFormOneScreen extends StatefulWidget {
-  const AskFormOneScreen({super.key});
+  // late TypeBanque typeBanque;
+  String nom ="";
+   AskFormOneScreen({super.key, required this.nom});
 
   @override
   State<AskFormOneScreen> createState() => _AskFormOneScreenState();
@@ -20,7 +25,8 @@ class _AskFormOneScreenState extends State<AskFormOneScreen> {
 
    File? image;
   String? imageSrc;
-
+ late TypeBanque typeBanque;
+ late Utilisateur utilisateur;
 
 
  
@@ -81,19 +87,21 @@ Future<void> _pickImage(ImageSource source) async {
 
   final _formKey = GlobalKey<FormState>();
   final textController = TextEditingController();
-    TextEditingController datenaiss = TextEditingController();
+
+    TextEditingController adresseController = TextEditingController();
+    TextEditingController datenaissController = TextEditingController();
+    TextEditingController numeroController = TextEditingController();
+
   final reponseController = TextEditingController();
   //radio
     SingingCharacter? _character = SingingCharacter.masculin;
     // radio var 
-  List<String> type = [];
-  List<String> choix = [];
+  
   @override
   void initState() {
     
     super.initState();
   }
-  List<String> visibilite = [];
 
   Future<void> _showImageSourceDialog() async {
   final BuildContext context = this.context;
@@ -144,7 +152,7 @@ Future<void> _pickImage(ImageSource source) async {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
-        title: Text('Compte courant', style: TextStyle(color: Color(0xFF9A6ABB), fontSize: 20),) ,
+        title: Text(widget.nom, style: TextStyle(color: Color(0xFF9A6ABB), fontSize: 20),) ,
         centerTitle: true,
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       ),
@@ -218,6 +226,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                                  controller:adresseController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -247,7 +256,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
-                                  controller:datenaiss,
+                                  controller:datenaissController,
                                   onTap: () async {
                                         DateTime? pickedDate = await showDatePicker(
                                             context: context,
@@ -262,7 +271,7 @@ Future<void> _pickImage(ImageSource source) async {
                                                   .format(pickedDate);
                                           print(formattedDate);
                                           setState(() {
-                                            datenaiss.text =
+                                            datenaissController.text =
                                                 formattedDate;
                                           });
                                         } else {}
@@ -296,6 +305,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                                  controller:numeroController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -332,14 +342,7 @@ Future<void> _pickImage(ImageSource source) async {
                             Row(
 
                               children: [
-                                // const SizedBox(width: 10,),
-                                // Text("Masculin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
-                                // const SizedBox(width: 10,),
-                                // Radio(value: (){}, groupValue: null, onChanged: null),
-                                // const SizedBox(width: 120,),
-                                // Text("Feminin", style: TextStyle( fontWeight: FontWeight.bold,fontSize: 15, color: Color(0xFF9A6ABB)),),
-                                // const SizedBox(width: 10,),
-                                // Radio(value: (){}, groupValue: null, onChanged: null),
+                            
                                  Radio<SingingCharacter>(
                             value: SingingCharacter.masculin,
                             groupValue: _character,
@@ -372,7 +375,15 @@ Future<void> _pickImage(ImageSource source) async {
 
                                   if (_formKey.currentState!.validate()) {
                                     debugPrint('Début validation ');
-                                   Navigator.push(context, MaterialPageRoute(builder: (context)=> const AskFormEnd() ));
+                                    Demande demande = Demande(
+        adresse: adresseController.text,
+        dateNaiss: datenaissController.text,
+        numeroUser: numeroController.text,
+        sexe: _character?.toString(),
+        typeBanque:typeBanque,
+        utilisateur:utilisateur,
+          );
+                                   Navigator.push(context, MaterialPageRoute(builder: (context)=>  AskFormEnd(demande:demande) ));
                                     
                               
                                    

@@ -40,4 +40,15 @@ class TypeBanque {
         "dateCreated": dateCreated,
         "banque": banque?.toJson(),
     };
+
+    Map<String, dynamic> toMap(){
+    return{
+      "idTypeBanque":idTypeBanque,
+      "nom":nom,
+      "descripton":description,
+      "image":image,
+      "dateCreated":dateCreated,
+      "banque":banque?.toJson()
+    };
+  }
 }

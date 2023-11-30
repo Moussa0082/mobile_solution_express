@@ -8,6 +8,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart';
 import 'package:solution_express/Banques/BankAskStateScreen.dart';
+import 'package:solution_express/models/Demande.dart';
 
     enum SingingCharacter {Celibataire, Marier }
 
@@ -15,7 +16,8 @@ import 'package:solution_express/Banques/BankAskStateScreen.dart';
 
 
 class AskFormEnd extends StatefulWidget {
-  const AskFormEnd({super.key});
+  late Demande demande;
+   AskFormEnd({super.key, required this.demande});
 
   @override
   State<AskFormEnd> createState() => _AskFormEndState();
@@ -36,15 +38,7 @@ class _AskFormEndState extends State<AskFormEnd> {
   bool isAddingResponse = false;
   int _textFieldCount = 0;
 
-  void generateTextField() {
-    if (_textFieldCount < 5) {
-      setState(() {
-        _textFieldCount++;
-        _reponseControllers
-            .add(TextEditingController()); // Ajoutez un nouveau contrôleur
-      });
-    }
-  }
+  
 
   // Fonction pour créer un bouton
   Widget buildButton({
@@ -132,15 +126,16 @@ Future<void> _pickImage(ImageSource source) async {
 }
 
   final _formKey = GlobalKey<FormState>();
-  final textController = TextEditingController();
+  final lieuNaissController = TextEditingController();
+  final nationnaliteController = TextEditingController();
   final reponseController = TextEditingController();
   List<String> type = [];
   List<String> choix = [];
   @override
   void initState() {
     
-    _reponseControllers = [];
     super.initState();
+    print(widget.demande);
   }
   List<String> visibilite = [];
 
@@ -222,6 +217,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                                  controller:lieuNaissController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -251,6 +247,7 @@ Future<void> _pickImage(ImageSource source) async {
 
                                 //Text form field 
                                  TextFormField(
+                          controller:nationnaliteController,
                     decoration: InputDecoration(
                         border: OutlineInputBorder(
                            borderSide: BorderSide(
@@ -282,9 +279,6 @@ Future<void> _pickImage(ImageSource source) async {
                               ],
                             ),
 
-                            
-   
-                  
                             Row(
 
                               children: [
