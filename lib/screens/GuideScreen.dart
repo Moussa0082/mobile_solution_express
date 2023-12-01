@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:solution_express/Banques/BankHomeScreen.dart';
 import 'package:solution_express/Banques/BankNav.dart';
+import 'package:solution_express/groupes/GrBottomBar.dart';
 import 'package:solution_express/widgets/MyAppBar.dart';
 
 class GuideScreen extends StatefulWidget {
@@ -55,6 +56,12 @@ class _GuideScreenState extends State<GuideScreen> {
    ),
      const SizedBox(height: 30),
    GestureDetector(
+
+  onTap:(){
+
+   Navigator.push(context, MaterialPageRoute(builder: (context)=> GrBottomBar() ));
+  },
+
      child: Container(
       margin:EdgeInsets.only(left:30),
       height: 200,

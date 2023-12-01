@@ -406,23 +406,24 @@ Future<void> _pickImage(ImageSource source) async {
   final statutMatrimonial = _characters.toString();
   utilisateur = utilisateur;
   
+      if(_formKey.currentState!.validate()){
 
   // Utilize your backend service to send the request
   DemandeService demandeService = DemandeService();
   try {
-  final Demande updatedDemande;
-     updatedDemande = await demandeService.faireDemande(
-      lieuNaiss: lieuNaissance,
-      nationnalite: nation,
-      etatCivil: etatCivil,
-      statutResidence: statutMatrimonial,
-      typeBanque: widget.typeBanque,
-      utilisateur: utilisateur,
-      adresse: adresse,
-      dateNaiss: dateNaiss,
-      numeroUser: numeroUser,
-      sexe: sexe,
-    );
+  // late Demande updatedDemande;
+  //    updatedDemande = await demandeService.faireDemande(
+  //     lieuNaiss: lieuNaissance,
+  //     nationnalite: nation,
+  //     etatCivil: etatCivil,
+  //     statutResidence: statutMatrimonial,
+  //     typeBanque: widget.typeBanque,
+  //     utilisateur: utilisateur,
+  //     adresse: adresse,
+  //     dateNaiss: dateNaiss,
+  //     numeroUser: numeroUser,
+  //     sexe: sexe,
+  //   );
 
     // Do something with the updated demand if needed
     Navigator.push(
@@ -430,7 +431,7 @@ Future<void> _pickImage(ImageSource source) async {
       MaterialPageRoute(builder: (context) => const BankAskStateScreen()),
     );
     
-    print("Demande envoyée avec succès: ${updatedDemande.toString()}");
+    // print("Demande envoyée avec succès: ${updatedDemande.toString()}");
     
     // Navigate to the next page if necessary
     // BuildContext context = this.context;
@@ -438,6 +439,7 @@ Future<void> _pickImage(ImageSource source) async {
     // Handle any exceptions that might occur during the request
     print("Error sending demande: $error");
   }
+                            }
 },
                               child: Text('Envoyer la demande', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)), ),
                               style: ElevatedButton.styleFrom(

@@ -1,38 +1,29 @@
 
+
 import 'dart:io';
-import 'package:path/path.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:solution_express/Banques/AskFormEnd.dart';
-import 'package:solution_express/models/Demande.dart';
-import 'package:solution_express/models/TypeBanque.dart';
-import 'package:solution_express/models/Utilisateur.dart';
-import 'package:solution_express/providers/UtilisateurProvider.dart';
-  enum SingingCharacter { masculin, feminin }
+import 'package:solution_express/screens/ProfilScreen.dart';
 
-class AskFormOneScreen extends StatefulWidget {
-  // late TypeBanque typeBanque;
-  String nom ="";
- final typesBanque;
-
-   AskFormOneScreen({super.key, required this.nom, required this.typesBanque});
+class CreateGroupeScreen extends StatefulWidget {
+  const CreateGroupeScreen({super.key});
 
   @override
-  State<AskFormOneScreen> createState() => _AskFormOneScreenState();
+  State<CreateGroupeScreen> createState() => _CreateGroupeScreenState();
 }
 
-class _AskFormOneScreenState extends State<AskFormOneScreen> {
+class _CreateGroupeScreenState extends State<CreateGroupeScreen> {
 
-   File? image;
+     File? image;
   String? imageSrc;
 //  late TypeBanque typeBanque;
 
-
-  // Fonction pour créer un bouton
+   // Fonction pour créer un bouton
   Widget buildButton({
     required String title,
     required IconData icon,
@@ -95,19 +86,13 @@ Future<void> _pickImage(ImageSource source) async {
 
   final reponseController = TextEditingController();
   //radio
-    SingingCharacter? _character = SingingCharacter.masculin;
     // radio var 
   
- late Utilisateur utilisateur;
-//  late TypeBanque typeBanque;
 
   @override
   void initState() {
     
     super.initState();
-   BuildContext context = (this.context);
-    utilisateur =
-        Provider.of<UtilisateurProvider>(context, listen: false).utilisateur!;
     // adresseController.clear();
     // datenaissController.clear();
     // numeroController.clear();        
@@ -158,11 +143,12 @@ Future<void> _pickImage(ImageSource source) async {
   );
 }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar:  AppBar(
-        title: Text(widget.nom, style: TextStyle(color: Color(0xFF9A6ABB), fontSize: 20),) ,
+        title: Text("Groupe damie", style: TextStyle(color: Color(0xFF9A6ABB), fontSize: 20),) ,
         centerTitle: true,
       backgroundColor: Color.fromARGB(255, 255, 255, 255),
       ),
@@ -231,7 +217,7 @@ Future<void> _pickImage(ImageSource source) async {
                             
                               Positioned(
                                 
-                                child: Text('Votre adresse', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                                child: Text('Nom du groupe', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                               ),
                             
                               //Text form field 
@@ -261,7 +247,7 @@ Future<void> _pickImage(ImageSource source) async {
                               // label 
                               Positioned(
                                 
-                                child: Text('Votre date de naissance', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                                child: Text('Date début', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                               ),
                             
                               //Text form field 
@@ -292,13 +278,13 @@ Future<void> _pickImage(ImageSource source) async {
                         color: Color(0xFF9A6ABB),
                           ),
                           borderRadius: BorderRadius.circular(15)),
-                      labelText: "Date de naisance",
-                      hintText: "Entrez votre date de naissance",
+                      labelText: "Date de fin",
+                      hintText: "Entrez la date de fin",
                      ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (val) {
                     if (val == null || val.isEmpty) {
-                      return "Veillez entrez votre date de naissance";
+                      return "Veillez entrez la date de fin";
                     } else {
                       return null;
                     }
@@ -339,8 +325,6 @@ Future<void> _pickImage(ImageSource source) async {
                             
                                       //radio button
                        SizedBox(height: 10,),
-                   
-                              Positioned(child: const Text("Votre sexe ",style: TextStyle( fontWeight: FontWeight.bold,fontSize: 20, color: Color(0xFF9A6ABB)),)),
                             ],
                           ),
                             
@@ -349,49 +333,19 @@ Future<void> _pickImage(ImageSource source) async {
                           ),
                                
                                       
-                          Row(
-                            
-                            children: [
-                          
-                               Radio<SingingCharacter>(
-                          value: SingingCharacter.masculin,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            setState(() {
-                              _character = value;
-                            });
-                          },
-                        ),
-                        const Text('Masculin' , style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB),),),
-                        const SizedBox(width:100),
-                        Radio<SingingCharacter>(
-                          value: SingingCharacter.feminin,
-                          groupValue: _character,
-                          onChanged: (SingingCharacter? value) {
-                            setState(() {
-                              _character = value;
-                            });
-                          },
-                        ),
-                        const Text('Féminin', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)),),
-                             
-                            ],
-                          ),
+                         
                             
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal:50.0),
                             child: ElevatedButton(
                               onPressed: ()  {
                             
-                                 final adresse = adresseController.text;
-                                 final dateNaiss = datenaissController.text;
-                                 final numeroUser = numeroController.text;
-                                 final sexe = _character.toString();
+                                
                             if(_formKey.currentState!.validate()){
                                   debugPrint('Début validation ' );
                            
                                 
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>  AskFormEnd(typeBanque: widget.typesBanque , nom: widget.nom,adresse: adresse, dateNaiss: dateNaiss,numeroUser: numeroUser,sexe: sexe,) ));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>  ProfilScreen() ));
                                
                                   
                             
@@ -425,103 +379,3 @@ Future<void> _pickImage(ImageSource source) async {
     );
   }
 }
-
-
-
-
-
-
-
-/* 
-Future<void> _showImageSourceDialog() async {
-  final BuildContext context = this.context; // Get the BuildContext from the current widget
-
-  return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Choisir une source'),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            GestureDetector(
-              onTap: () {
-                // Demander l'autorisation d'accéder à la caméra
-                // if (PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.camera)) {
-                //   // L'utilisateur n'a pas encore été invité à accorder l'autorisation
-                //   // Demander l'autorisation
-                //   PermissionHandler().requestPermissions([PermissionGroup.camera]).then((permissions) {
-                //     if (permissions[PermissionGroup.camera] == PermissionStatus.granted) {
-                //       // L'autorisation a été accordée
-                //       _pickImage(ImageSource.camera);
-                //     } else {
-                //       // L'autorisation a été refusée
-                //       // Afficher un message d'erreur à l'utilisateur
-                //       // Afficher un message dans un Toast
-                //       Fluttertoast.showToast(
-                //         msg: "L'autorisation d'accéder à la caméra a été refusée",
-                //         toastLength: Toast.LENGTH_SHORT,
-                //         gravity: ToastGravity.CENTER,
-                //         backgroundColor: Colors.red,
-                //         textColor: Colors.white,
-                //       );
-                //     }
-                //   });
-                // } else {
-                  // L'utilisateur a déjà été invité à accorder l'autorisation
-                  // Prendre une photo sans demander l'autorisation
-                  _pickImage(ImageSource.camera);
-                // }
-              },
-              child: Column(
-                children: [
-                  Icon(Icons.camera_alt, size: 40),
-                  Text('Prendre une photo'),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Demander l'autorisation d'accéder à la galerie
-                // if (PermissionHandler().shouldShowRequestPermissionRationale(PermissionGroup.photos)) {
-                //   // L'utilisateur n'a pas encore été invité à accorder l'autorisation
-                //   // Demander l'autorisation
-                //   PermissionHandler().requestPermissions([PermissionGroup.photos]).then((permissions) {
-                //     if (permissions[PermissionGroup.photos] == PermissionStatus.granted) {
-                //       // L'autorisation a été accordée
-                //       _pickImage(ImageSource.gallery);
-                //     } else {
-                //       // L'autorisation a été refusée
-                //       // Afficher un message d'erreur à l'utilisateur
-                //       // Afficher un message dans un Toast
-                //       Fluttertoast.showToast(
-                //         msg: "L'autorisation d'accéder à la galerie a été refusée",
-                //         toastLength: Toast.LENGTH_SHORT,
-                //         gravity: ToastGravity.CENTER,
-                //         backgroundColor: Colors.red,
-                //         textColor: Colors.white,
-                //       );
-                //     }
-                //   });
-                // } else {
-                  // L'utilisateur a déjà été invité à accorder l'autorisation
-                  // Prendre une photo sans demander l'autorisation
-                  _pickImage(ImageSource.gallery);
-                // }
-              },
-              child: Column(
-                children: [
-                  Icon(Icons.image, size: 40),
-                  Text('Choisir depuis la galerie'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
-    },
-  );
-}
-
-
-*/
