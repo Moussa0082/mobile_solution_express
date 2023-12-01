@@ -229,25 +229,132 @@ Future<void> _pickImage(ImageSource source) async {
                         color: Color(0xFF9A6ABB),
                           ),
                           borderRadius: BorderRadius.circular(15)),
-                      labelText: "Adresse",
-                      hintText: "Entrez votre adresse",
+                      labelText: "Nom du groupe",
+                      hintText: "Entrez le nom du groupe",
                      ),
                   keyboardType: TextInputType.emailAddress,
                   validator: (val) {
                     if (val == null || val.isEmpty) {
-                      return "Veillez entrez votre adresse";
+                      return "Veillez entrez le nom du groupe";
+                    } else {
+                      return null;
+                    }
+                  },
+                  // onSaved: (val) => email = val!,
+                ),
+                const SizedBox(height: 10,),
+                              Positioned(
+                                
+                                child: Text('Prix Cotisation', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                              ),
+                            
+                              //Text form field 
+                               TextFormField(
+                                controller:adresseController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                         borderSide: BorderSide(
+                        color: Color(0xFF9A6ABB),
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                      labelText: "Prix cotisation",
+                      hintText: "Entrez le prix de la cotisation",
+                     ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return "Veillez entrez le nom du groupe";
+                    } else {
+                      return null;
+                    }
+                  },
+                  // onSaved: (val) => email = val!,
+                ),
+
+                       const SizedBox(height:10),
+                              // label 
+                              Positioned(
+                                
+                                child: Text('Description du groupe', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                              ),
+                            
+                              //Text form field 
+                               TextFormField(
+                                controller:numeroController,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                         borderSide: BorderSide(
+                        color: Color(0xFF9A6ABB),
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                      labelText: "Description",
+                      hintText: "Entrez la description du groupe",
+                     ),
+                  keyboardType: TextInputType.text,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return "Veillez entrez la description du groupe";
                     } else {
                       return null;
                     }
                   },
                   // onSaved: (val) => email = val!,
                                       ),
+                                    
                                     //  fin textform field 
                                     const SizedBox(height:10),
                               // label 
                               Positioned(
                                 
                                 child: Text('Date début', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
+                              ),
+                            
+                              //Text form field 
+                               TextFormField(
+                                controller:datenaissController,
+                                onTap: () async {
+                                      DateTime? pickedDate = await showDatePicker(
+                                          context: context,
+                                          initialDate: DateTime.now(),
+                                          firstDate: DateTime(1950),
+                                          //DateTime.now() - not to allow to choose before today.
+                                          lastDate: DateTime(2100));
+                                      if (pickedDate != null) {
+                                        print(pickedDate);
+                                        String formattedDate =
+                                            DateFormat('yyyy-MM-dd')
+                                                .format(pickedDate);
+                                        print(formattedDate);
+                                        setState(() {
+                                          datenaissController.text =
+                                              formattedDate;
+                                        });
+                                      } else {}
+                                    },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                         borderSide: BorderSide(
+                        color: Color(0xFF9A6ABB),
+                          ),
+                          borderRadius: BorderRadius.circular(15)),
+                      labelText: "Date début",
+                      hintText: "Entrez la date de début",
+                     ),
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (val) {
+                    if (val == null || val.isEmpty) {
+                      return "Veillez entrez la date du début";
+                    } else {
+                      return null;
+                    }
+                  },
+                  // onSaved: (val) => email = val!,
+                  ),
+                                    const SizedBox(height:10),
+                              // label 
+                              Positioned(
+                                
+                                child: Text('Date fin', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
                               ),
                             
                               //Text form field 
@@ -290,37 +397,7 @@ Future<void> _pickImage(ImageSource source) async {
                     }
                   },
                   // onSaved: (val) => email = val!,
-                                      ),
-                                    //  fin textform field 
-                                    const SizedBox(height:10),
-                              // label 
-                              Positioned(
-                                
-                                child: Text('Votre numéro de telephone', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB), fontSize: 20),),
-                              ),
-                            
-                              //Text form field 
-                               TextFormField(
-                                controller:numeroController,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                         borderSide: BorderSide(
-                        color: Color(0xFF9A6ABB),
-                          ),
-                          borderRadius: BorderRadius.circular(15)),
-                      labelText: "Téléphone",
-                      hintText: "Entrez votre numero de telephone",
-                     ),
-                  keyboardType: TextInputType.number,
-                  validator: (val) {
-                    if (val == null || val.isEmpty) {
-                      return "Veillez entrez votre numéro de telephone";
-                    } else {
-                      return null;
-                    }
-                  },
-                  // onSaved: (val) => email = val!,
-                                      ),
+                  ),
                                     //  fin textform field 
                             
                                       //radio button

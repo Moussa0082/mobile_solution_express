@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:solution_express/models/Utilisateur.dart';
 import 'package:solution_express/providers/UtilisateurProvider.dart';
 import 'package:solution_express/screens/BottomBar.dart';
+import 'package:solution_express/screens/LoginScreen.dart';
 import 'package:solution_express/screens/UpdateProfilScreen.dart';
 
 class ProfilScreen extends StatefulWidget {
@@ -140,8 +141,17 @@ class _ProfilScreenState extends State<ProfilScreen> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        onPressed: 
-                          (){},
+                        onPressed: () async {
+                          // final utilisateurProvider = Provider.of<UtilisateurProvider>(context, listen: false);
+
+    // Déconnexion avec le provider
+    // await utilisateurProvider.logout();
+                            Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()),
+      (route) => false,
+             );
+                          },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFF9A6ABB),
                             shape: RoundedRectangleBorder(

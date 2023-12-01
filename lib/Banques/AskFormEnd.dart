@@ -411,19 +411,19 @@ Future<void> _pickImage(ImageSource source) async {
   // Utilize your backend service to send the request
   DemandeService demandeService = DemandeService();
   try {
-  // late Demande updatedDemande;
-  //    updatedDemande = await demandeService.faireDemande(
-  //     lieuNaiss: lieuNaissance,
-  //     nationnalite: nation,
-  //     etatCivil: etatCivil,
-  //     statutResidence: statutMatrimonial,
-  //     typeBanque: widget.typeBanque,
-  //     utilisateur: utilisateur,
-  //     adresse: adresse,
-  //     dateNaiss: dateNaiss,
-  //     numeroUser: numeroUser,
-  //     sexe: sexe,
-  //   );
+  late Demande updatedDemande;
+     updatedDemande = await demandeService.faireDemande(
+      lieuNaiss: lieuNaissance,
+      nationnalite: nation,
+      etatCivil: etatCivil,
+      statutResidence: statutMatrimonial,
+      typeBanque: widget.typeBanque,
+      utilisateur: utilisateur,
+      adresse: adresse,
+      dateNaiss: dateNaiss,
+      numeroUser: numeroUser,
+      sexe: sexe,
+    );
 
     // Do something with the updated demand if needed
     Navigator.push(
@@ -437,6 +437,20 @@ Future<void> _pickImage(ImageSource source) async {
     // BuildContext context = this.context;
   } catch (error) {
     // Handle any exceptions that might occur during the request
+    final String errorMessage = error.toString();
+     showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Erreur lors de l'inscription"),
+      content: Text(errorMessage),
+      actions: [
+        TextButton(
+          child: Text("OK"),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
+    ),
+  );
     print("Error sending demande: $error");
   }
                             }

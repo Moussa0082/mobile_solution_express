@@ -14,10 +14,10 @@ class CarouselModel extends ChangeNotifier {
 
 class GroupeCarousele extends StatelessWidget {
   final List<String> imagePaths = [
-    'assets/image/compteC.png',
-    'assets/image/compteC.png',
-    'assets/image/compteC.png',
-    'assets/image/compteC.png'
+    'assets/image/gr.png.png',
+    'assets/image/gr.png.png',
+    'assets/image/gr.png.png',
+    'assets/image/gr.png.png'
     // Ajoutez d'autres chemins d'image au besoin
   ];
 

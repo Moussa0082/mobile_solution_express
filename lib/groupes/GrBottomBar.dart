@@ -23,8 +23,8 @@ class _GrBottomBarState extends State<GrBottomBar> {
 
 final List<Widget> _listTab = <Widget>[
   const GuideScreen(),
-  const CategorieScreen(),
   const MyPaymentScreen(),
+  const CategorieScreen(),
   const ProfilScreen(),
 
 ];

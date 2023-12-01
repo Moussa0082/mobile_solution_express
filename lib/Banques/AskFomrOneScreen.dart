@@ -121,7 +121,7 @@ Future<void> _pickImage(ImageSource source) async {
       return SizedBox(
         height: 150,
         child: AlertDialog(
-          title: Text('Choisir une source'),
+          title: Text("Photo d'identité"),
           content: Wrap(
             alignment: WrapAlignment.center,
             children: [

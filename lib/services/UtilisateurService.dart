@@ -43,7 +43,7 @@ class UtilisateurService extends ChangeNotifier {
       var response = await request.send();
     
       var responsed = await http.Response.fromStream(response);
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         final responseData = json.decode(responsed.body);
         debugPrint(responsed.body);
         return Utilisateur.fromJson(responseData);

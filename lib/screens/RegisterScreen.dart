@@ -133,10 +133,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
       email_controller.clear();
       passwordController.clear();
       passwordConfirmController.clear();
+      BuildContext context = this.context;
+      Navigator.push(context, MaterialPageRoute(builder: 
+      (context) => LoginScreen()));
 
     } catch (e) {
+      BuildContext context = this.context;
       // Une erreur s'est produite lors de l'ajout de l'utilisateur, vous pouvez gérer l'erreur ici.
       final String errorMessage = e.toString();
+     showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text("Erreur lors de l'inscription"),
+      content: Text(errorMessage),
+      actions: [
+        TextButton(
+          child: Text("OK"),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ],
+    ),
+  );
       debugPrint(errorMessage);
      
     }

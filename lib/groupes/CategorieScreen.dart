@@ -64,12 +64,12 @@ class _CategorieScreenState extends State<CategorieScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            "assets/image/bnda.png"
+                            "assets/image/aide.png"
                            
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Groupes d'amie",
+                            "Aide financière",
                             // Utilisez le champ nom de votre objet TypeBanque
                             style: TextStyle(
                               color: Color(0xFF9A6ABB),
@@ -112,12 +112,12 @@ class _CategorieScreenState extends State<CategorieScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            "assets/image/bnda.png"
+                            "assets/image/familiale.png"
                            
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Groupes d'amie",
+                            "Famille",
                             // Utilisez le champ nom de votre objet TypeBanque
                             style: TextStyle(
                               color: Color(0xFF9A6ABB),
@@ -159,12 +159,12 @@ class _CategorieScreenState extends State<CategorieScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            "assets/image/bnda.png"
+                            "assets/image/cite.png"
                            
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            "Groupes d'amie",
+                            "Groupes de cité",
                             // Utilisez le champ nom de votre objet TypeBanque
                             style: TextStyle(
                               color: Color(0xFF9A6ABB),
@@ -207,7 +207,7 @@ class _CategorieScreenState extends State<CategorieScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Image.asset(
-                            "assets/image/bnda.png"
+                            "assets/image/amie.png"
                            
                           ),
                           const SizedBox(height: 10),
