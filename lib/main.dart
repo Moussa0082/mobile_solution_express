@@ -25,7 +25,7 @@ void main() {
          ChangeNotifierProvider(create: (context) => TypeBanqueProvider()),
          ChangeNotifierProvider(create: (context) => UtilisateurProvider()),
          ChangeNotifierProvider(create: (context) => UtilisateurService()),
-          ChangeNotifierProvider(create: (context) => BanqueService()),
+         ChangeNotifierProvider(create: (context) => BanqueService()),
        ],
        child:  const MyApp()),
   );

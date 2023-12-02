@@ -110,7 +110,7 @@ class Demande {
     String? photoValide;
     String numeroUser;
     String sexe;
-    DateTime dateNaiss;
+    String dateNaiss;
     String lieuNaiss;
     String nationnalite;
     String adresse;
@@ -141,7 +141,7 @@ class Demande {
         photoValide: json["photoValide"],
         numeroUser: json["numeroUser"],
         sexe: json["sexe"],
-        dateNaiss: DateTime.parse(json["dateNaiss"]),
+        dateNaiss: json["dateNaiss"],
         lieuNaiss: json["lieuNaiss"],
         nationnalite: json["nationnalite"],
         adresse: json["adresse"],

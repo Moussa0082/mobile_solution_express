@@ -19,7 +19,7 @@ final bottomNavigationBackgroundColor = kAppBarColor;
 
 class _GrBottomBarState extends State<GrBottomBar> {
    
-       int _selectedIndex = 1;
+       int _selectedIndex =2;
 
 final List<Widget> _listTab = <Widget>[
   const GuideScreen(),

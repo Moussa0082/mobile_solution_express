@@ -44,7 +44,9 @@ class _AskFormEndState extends State<AskFormEnd> {
 
       SingingCharacter? _character = SingingCharacter.Celibataire;
       SingingCharacters? _characters = SingingCharacters.Resident_Permanent;
-
+       String toShortString() {
+    return toString().split('.').last;
+  }
 
   bool isAddingResponse = false;
   int _textFieldCount = 0;
@@ -406,7 +408,7 @@ Future<void> _pickImage(ImageSource source) async {
   final statutMatrimonial = _characters.toString();
   utilisateur = utilisateur;
   
-      if(_formKey.currentState!.validate()){
+      // if(_formKey.currentState!.validate()){
 
   // Utilize your backend service to send the request
   DemandeService demandeService = DemandeService();
@@ -430,7 +432,6 @@ Future<void> _pickImage(ImageSource source) async {
       context,
       MaterialPageRoute(builder: (context) => const BankAskStateScreen()),
     );
-    
     // print("Demande envoyée avec succès: ${updatedDemande.toString()}");
     
     // Navigate to the next page if necessary
@@ -453,7 +454,7 @@ Future<void> _pickImage(ImageSource source) async {
   );
     print("Error sending demande: $error");
   }
-                            }
+                            // }
 },
                               child: Text('Envoyer la demande', style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Color(0xFF9A6ABB)), ),
                               style: ElevatedButton.styleFrom(
