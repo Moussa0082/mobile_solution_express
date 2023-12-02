@@ -124,7 +124,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         );
       }
-
       nouveauUtilisateur;
       // Le nouvel utilisateur a été ajouté avec succès, vous pouvez gérer la réponse ici.
       print('Utilisateur ajouté avec succès : ${nouveauUtilisateur.nom}');
@@ -163,15 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     return 
      Scaffold(
-      // backgroundColor:
-      // LinearGradient(
-      //   Colors = [
-           
-      //   ],
-      //   begin = Alignment.topCenter,
-      //   end = Alignment.bottomCenter,
-      //   transform = GradientRotation(math.pi / 3),
-      // ),
+    
         body: Container(
            decoration: const BoxDecoration(
         gradient: LinearGradient(

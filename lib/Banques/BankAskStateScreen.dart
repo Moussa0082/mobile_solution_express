@@ -4,6 +4,7 @@
    
 import 'package:flutter/material.dart';
 import 'package:solution_express/Banques/AskFomrOneScreen.dart';
+import 'package:solution_express/screens/BottomBar.dart';
 import 'package:solution_express/widgets/MyAppBar.dart';
 import 'package:solution_express/widgets/TypeInfoCarousel.dart';
 
@@ -65,14 +66,19 @@ class _BankAskStateScreenState extends State<BankAskStateScreen> {
               backgroundColor: Color(0xFF9A6ABB), fixedSize: Size(300, 30) ),
              
              ),
+             const SizedBox(height: 15,),
+                      ElevatedButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>Nav()),);
+            }, child: Text('Aller vers accueil', 
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFFFFFFFF), ),
+             ), style: ElevatedButton.styleFrom( shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              backgroundColor: (Colors.red), fixedSize: Size(300, 30) ),
+             
+             ),
 
-        
-        
-        
-          
-        
           ],
-        
         ),
       ),
     );
